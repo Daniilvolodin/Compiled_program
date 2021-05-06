@@ -10,6 +10,13 @@ label_config = {
 
 }
 
+button_config = {
+    'bg': 'green',
+    'fg': 'white',
+    'relief': 'flat'
+}
+
+
 already_answered_root = []
 
 already_answered_opt = []

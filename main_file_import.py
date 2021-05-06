@@ -6,7 +6,7 @@ from lists_and_dictionaries import *
 class CompileProgram:
 
     def __init__(self, parameter):
-
+        MenuButton()
         self.parameter = parameter
 
 

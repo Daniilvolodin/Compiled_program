@@ -1,6 +1,4 @@
-from tkinter import *
 from menu_btn_contents import *
-from lists_and_dictionaries import *
 
 
 class CompileProgram:

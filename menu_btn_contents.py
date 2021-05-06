@@ -1,4 +1,4 @@
-from main_frame import *
+from tkinter import *
 from lists_and_dictionaries import *
 
 

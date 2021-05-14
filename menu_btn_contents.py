@@ -3,6 +3,7 @@ from lists_and_dictionaries import *
 from tkinter import ttk
 
 
+
 class StartContent:
     def __init__(self):
         self.menu_frame = Frame()
@@ -124,9 +125,12 @@ class setTimer:
         MenuScreen()
 
     def min_configure(self):
-
         self.min_left += 1
         self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
+
+        if self.min_left == 60:
+            self.minute_button.configure(state=DISABLED)
+            self.second_button.configure(state=DISABLED)
 
     def sec_configure(self):
         self.sec_left += 10

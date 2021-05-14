@@ -29,7 +29,7 @@ class StartContent:
 class MenuScreen:
     def __init__(self):
         self.menu_s_frame = Frame(bg=transparent)
-        self.menu_s_frame.place(relx=0.5, rely=0.25, anchor=CENTER)
+        self.menu_s_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.menu_content_frame = Frame(self.menu_s_frame, bg=transparent)
         self.menu_content_frame.grid(row=0)
@@ -63,28 +63,79 @@ class MenuScreen:
         self.apply_settings = Button(self.menu_content_frame, text='Apply Settings')
         self.apply_settings.grid(row=5, sticky=NSEW)
 
-        self.b_b_frame = Frame()
-        self.b_b_frame.place(relx=0.025, rely=0.025)
-        self.back_btn = Button(self.b_b_frame, **button_config, text='Back',
+        self.back_btn = Button(**back_button,
                                command=lambda: self.back_menu())
-        self.back_btn.grid(row=0, ipady=12 * scale, ipadx=12 * scale)
+        self.back_btn.place(relx=0.025, rely=0.025)
 
     def back_menu(self):
-        for x in [self.menu_s_frame, self.b_b_frame]:
-            x.destroy()
+        self.menu_s_frame.destroy()
         StartContent()
 
     def to_timer(self):
-        for x in [self.menu_s_frame, self.b_b_frame]:
-            x.destroy()
+        self.menu_s_frame.destroy()
+        self.menu_content_frame.destroy()
         setTimer()
 
 
 class setTimer:
     def __init__(self):
 
+        self.minute_var = IntVar()
+        self.second_var = IntVar()
+        self.min_left = minutes_left
+        self.sec_left = seconds_left
         self.starter_frame = Frame(bg=transparent)
-        self.starter_frame.place(relx=0.5, rely=0.25, anchor=CENTER)
+        self.starter_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.timer_label = Label(self.starter_frame, text='Set Time', **settings_label)
         self.timer_label.grid(row=0)
+
+        self.time_display = Label(self.starter_frame, text='%d:%d' % (self.min_left,
+                                                                      self.sec_left),
+                                  bg=transparent,
+                                  fg='white', font='Helvetica 20')
+        self.time_display.grid(row=1, pady=20)
+
+        self.button_frame = Frame(self.starter_frame, bg=transparent)
+        self.button_frame.grid(row=2, pady=3)
+
+        self.minute_button = Button(self.button_frame, text='Add minute', **timer_buttons,
+                                    command=lambda: self.min_configure())
+        self.minute_button.grid(row=0, column=0, padx=(0, 3))
+
+        self.second_button = Button(self.button_frame, text='Add 10 seconds', **timer_buttons,
+                                    command=lambda: self.sec_configure())
+        self.second_button.grid(row=0, column=1)
+
+        self.set_default = Button(self.starter_frame, text='Set to default', **timer_buttons,
+                                  command=lambda: self.default_set())
+        self.set_default.grid(row=3, sticky=NSEW, pady=(0, 3))
+
+        self.apply_settings_time = Button(self.starter_frame, text='Apply settings', **timer_buttons,
+                                          )
+        self.apply_settings_time.grid(row=4, sticky=NSEW)
+
+        self.back_button = Button(**back_button, command=lambda: self.back_to_menu())
+        self.back_button.place(relx=0.025, rely=0.025)
+
+    def back_to_menu(self):
+        for x in [self.starter_frame, self.back_button, self.button_frame]:
+            x.destroy()
+        MenuScreen()
+
+    def min_configure(self):
+
+        self.min_left += 1
+        self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
+
+    def sec_configure(self):
+        self.sec_left += 10
+        if self.sec_left >= 60:
+            self.sec_left = 0
+            self.min_left += 1
+        self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
+
+    def default_set(self):
+        self.sec_left = 30
+        self.min_left = 5
+        self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))

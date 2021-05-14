@@ -35,6 +35,23 @@ settings_label = {'bg': transparent,
                   'fg': 'white',
                   'font': 'Helvetica 25 underline'}
 
+timer_buttons = {
+    'font': 'Helvetica 10',
+    'relief': 'flat'
+}
+
+back_button = {
+    'text': 'Back',
+    'bg': 'green',
+    'fg': 'white',
+    'relief': 'flat',
+    'font': ('helvetica', 12 * scale, 'bold'),
+    'activebackground': '#004d05',
+    'activeforeground': 'white'
+
+}
+
+
 already_answered_root = []
 
 already_answered_opt = []

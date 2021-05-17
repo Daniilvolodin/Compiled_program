@@ -142,7 +142,7 @@ class setTimer:
     def back_to_menu(self):
         self.starter_frame.destroy()
         self.button_frame.destroy()
-        MenuScreen(self)
+        MenuScreen(self.parameter)
 
     def min_configure(self):
         self.min_left += 1

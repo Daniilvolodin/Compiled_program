@@ -3,13 +3,24 @@ from lists_and_dictionaries import *
 from tkinter import ttk
 
 
+def adjust(x, y, z):
+    if x.get() == 1:
+        z.state('zoomed')
+    if x.get() == 0:
+        set_size(x=z)
+    if y.get() == 1:
+        z.overrideredirect(1)
+    if y.get() == 0:
+        z.overrideredirect(0)
+
 
 class StartContent:
-    def __init__(self):
+    def __init__(self, parameter):
         self.menu_frame = Frame()
+        self.parameter = parameter
         self.menu_frame.place(relx=0.025, rely=0.025)
         self.menu_button = Button(self.menu_frame, **button_config,
-                                  text='Menu Button', command=lambda: self.to_menu_screen())
+                                  text='Menu Button', command=lambda: self.to_menu_screen(self.parameter))
         self.menu_button.grid(row=0, ipady=10 * scale, ipadx=10 * scale)
 
         self.alg_quiz_frame = Frame(bg=transparent)
@@ -21,15 +32,18 @@ class StartContent:
         self.alg_quiz_button = Button(self.alg_quiz_frame, text='Start Quiz', **button_config)
         self.alg_quiz_button.grid(row=1, ipadx=20 * scale, ipady=5 * scale)
 
-    def to_menu_screen(self):
+    def to_menu_screen(self, parameter):
+
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
-        MenuScreen()
+        MenuScreen(parameter)
 
 
 class MenuScreen:
-    def __init__(self):
+    def __init__(self, parameter):
+        self.full_screen = IntVar()
         self.menu_s_frame = Frame(bg=transparent)
+        self.parameter = parameter
         self.menu_s_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.menu_content_frame = Frame(self.menu_s_frame, bg=transparent)
@@ -41,7 +55,8 @@ class MenuScreen:
         self.menu_label.grid(row=0, sticky=NSEW)
 
         self.style = ttk.Style()
-        self.change_res_slide = ttk.Checkbutton(self.menu_content_frame, text='Full Screen')
+        self.change_res_slide = ttk.Checkbutton(self.menu_content_frame, text='Full Screen', offvalue=0,
+                                                onvalue=1, variable=self.full_screen)
         self.style.configure('TCheckbutton', background=transparent, foreground='white',
                              font='helvetica 12 bold')
         self.change_res_slide.grid(row=1, sticky=NSEW)
@@ -57,30 +72,35 @@ class MenuScreen:
         self.without_title_bar.grid(row=3, sticky=NSEW)
 
         self.set_timer_btn = Button(self.menu_content_frame, text='Set Timer',
-                                    bg='white', fg='black', command=lambda: self.to_timer())
+                                    bg='white', fg='black', command=lambda: self.to_timer(self.parameter))
 
         self.set_timer_btn.grid(row=4, sticky=NSEW, pady=10)
 
-        self.apply_settings = Button(self.menu_content_frame, text='Apply Settings')
+        self.apply_settings = Button(self.menu_content_frame, text='Apply Settings',
+                                     command=lambda: self.do_here())
         self.apply_settings.grid(row=5, sticky=NSEW)
 
         self.back_btn = Button(**back_button,
                                command=lambda: self.back_menu())
         self.back_btn.place(relx=0.025, rely=0.025)
 
+    def do_here(self):
+        adjust(x=self.full_screen, y=self.value_windowed,
+               z=self.parameter)
+
     def back_menu(self):
         self.menu_s_frame.destroy()
-        StartContent()
+        StartContent(self)
 
-    def to_timer(self):
+    def to_timer(self, parameter):
         self.menu_s_frame.destroy()
         self.menu_content_frame.destroy()
-        setTimer()
+        setTimer(parameter)
 
 
 class setTimer:
-    def __init__(self):
-
+    def __init__(self, parameter):
+        self.parameter = parameter
         self.minute_var = IntVar()
         self.second_var = IntVar()
         self.min_left = minutes_left
@@ -113,33 +133,45 @@ class setTimer:
         self.set_default.grid(row=3, sticky=NSEW, pady=(0, 3))
 
         self.apply_settings_time = Button(self.starter_frame, text='Apply settings', **timer_buttons,
-                                          )
+                                          command=lambda: self.apply_setting())
         self.apply_settings_time.grid(row=4, sticky=NSEW)
 
         self.back_button = Button(**back_button, command=lambda: self.back_to_menu())
         self.back_button.place(relx=0.025, rely=0.025)
 
     def back_to_menu(self):
-        for x in [self.starter_frame, self.back_button, self.button_frame]:
-            x.destroy()
-        MenuScreen()
+        self.starter_frame.destroy()
+        self.button_frame.destroy()
+        MenuScreen(self)
 
     def min_configure(self):
         self.min_left += 1
         self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
 
         if self.min_left == 60:
+            self.sec_left = 0
             self.minute_button.configure(state=DISABLED)
             self.second_button.configure(state=DISABLED)
+            self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
 
     def sec_configure(self):
         self.sec_left += 10
         if self.sec_left >= 60:
             self.sec_left = 0
             self.min_left += 1
+        if self.min_left >= 60:
+            self.sec_left = 0
+            self.min_left = 60
+
         self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
 
     def default_set(self):
         self.sec_left = 30
-        self.min_left = 5
+        self.min_left = 15
         self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
+
+    def apply_setting(self):
+        seconds_left = self.sec_left
+        minutes_left = self.min_left
+        print('minutes:', minutes_left)
+        print('seconds:', seconds_left)

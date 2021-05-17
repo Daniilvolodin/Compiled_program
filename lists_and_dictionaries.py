@@ -1,7 +1,19 @@
+import ctypes
+
+
 def list_clear(x, y, z):
     for list_1 in [x, y, z]:
-        list.clear()
+        list_1.clear()
 
+
+# Adjusts screen to be 600 by 500
+# and align it in the middle.
+def set_size(x):
+    # Grabs user screen aspects (resolution)
+    height = int((ctypes.windll.user32.GetSystemMetrics(0) / 2) - 300)
+    width = int(ctypes.windll.user32.GetSystemMetrics(1) / 2 - 250)
+    x.state('normal')
+    return x.geometry("600x500+{}+{}".format(height, width))
 
 scale = 1
 font_scale = 1
@@ -58,6 +70,14 @@ already_answered_opt = []
 
 already_answered_two = []
 
+correct = []
+
+incorrect = []
+
+typed_answers = []
+
+correct_answers = []
+
 seconds_left = 30
 
-minutes_left = 5
+minutes_left = 15

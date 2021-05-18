@@ -1,9 +1,26 @@
 import ctypes
+import random
 
 
 def list_clear(x, y, z):
     for list_1 in [x, y, z]:
         list_1.clear()
+
+
+def check_operator(x):
+    if x >= 0:
+        return "+" + str(x)
+
+    else:
+        return str(x)
+
+
+def remove_one(x):
+    if x == 1:
+        x = ''
+        return x
+    else:
+        return x
 
 
 # Adjusts screen to be 600 by 500
@@ -63,11 +80,13 @@ back_button = {
 
 }
 
-
+# Two entries per question
 already_answered_root = []
 
+# Four options per question (Four vari)
 already_answered_opt = []
 
+# Three Entries per question (two roots and one simplified expression)
 already_answered_two = []
 
 correct = []
@@ -81,3 +100,8 @@ correct_answers = []
 seconds_left = 30
 
 minutes_left = 15
+
+
+class RandomizeAll:
+    def __init__(self):
+        self.acceptable = [random.randrange(-9, -1), random.randrange(1, 9)]

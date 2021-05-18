@@ -6,8 +6,8 @@ class CompileProgram:
 
     def __init__(self, parameter):
         self.parameter = parameter
-        StartContent(self.parameter)
 
+        StartContent(self.parameter)
 
 root = Tk()
 app = CompileProgram(root)

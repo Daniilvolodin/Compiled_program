@@ -42,7 +42,7 @@ class StartContent:
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
 
-        OptionPick()
+        randomized_question_gen[0](self)
 
 
 class MenuScreen:

@@ -69,6 +69,7 @@ timer_buttons = {
     'relief': 'flat'
 }
 
+
 back_button = {
     'text': 'Back',
     'bg': 'green',
@@ -83,7 +84,7 @@ back_button = {
 # Two entries per question
 already_answered_root = []
 
-# Four options per question (Four vari)
+# Four options per question (Four variables)
 already_answered_opt = []
 
 # Three Entries per question (two roots and one simplified expression)
@@ -96,6 +97,8 @@ incorrect = []
 typed_answers = []
 
 correct_answers = []
+
+randomized_question_gen = []
 
 seconds_left = 30
 

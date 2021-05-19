@@ -8,12 +8,12 @@ class CompileProgram:
         self.parameter = parameter
 
         StartContent(self.parameter)
-
-root = Tk()
-app = CompileProgram(root)
-root.title('Algebra Quiz')
-set_size(x=root)
-root.configure(bg='#787878')
-photo = PhotoImage(file='iconchip.png')
-root.iconphoto(False, photo)
-root.mainloop()
+if __name__ == "__main__":
+    root = Tk()
+    app = CompileProgram(root)
+    root.title('Algebra Quiz')
+    set_size(x=root)
+    root.configure(bg='#787878')
+    photo = PhotoImage(file='iconchip.png')
+    root.iconphoto(False, photo)
+    root.mainloop()

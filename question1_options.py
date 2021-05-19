@@ -73,9 +73,12 @@ class OptionPick:
 
     def check_answer(self):
         if self.user_pick.get() - 1 == self.shuffle_questions.index(self.correct):
-            print('Correct')
+            correct.append("Correct")
+
         else:
-            print('Incorrect')
+            incorrect.append("Incorrect")
+            correct_answers.append(self.correct)
+        typed_answers.append(self.question)
 
 for num in range(3):
     randomized_question_gen.append(OptionPick)

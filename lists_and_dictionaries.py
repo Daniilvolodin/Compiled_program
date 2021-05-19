@@ -81,14 +81,6 @@ back_button = {
 
 }
 
-# Two entries per question
-already_answered_root = []
-
-# Four options per question (Four variables)
-already_answered_opt = []
-
-# Three Entries per question (two roots and one simplified expression)
-already_answered_two = []
 
 correct = []
 

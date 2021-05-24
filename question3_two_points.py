@@ -49,10 +49,13 @@ class TwoPointQ:
         self.root_2_entry.grid(row=2, column=1, ipady=3)
 
         self.buttons_frame = Frame(self.start_frame)
-        self.buttons_frame.grid(row=2)
+        self.buttons_frame.grid(row=2, pady=(10, 0))
 
         self.b1 = Button(self.buttons_frame, text='Check')
-        self.b1.grid(row=0, column=0, ipadx=10, ipady=3)
+        self.b1.grid(row=0, column=0, ipadx=70, ipady=3)
 
         self.b2 = Button(self.buttons_frame, text='?')
         self.b2.grid(row=0, column=1, ipadx=10, ipady=3)
+
+        self.next_button = Button(text="Next", state=DISABLED)
+        self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)

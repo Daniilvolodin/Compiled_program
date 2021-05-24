@@ -1,5 +1,6 @@
 from tkinter import ttk
 from question1_options import *
+from question3_two_points import TwoPointQ
 
 
 def adjust(x, y, z):
@@ -11,6 +12,8 @@ def adjust(x, y, z):
         z.overrideredirect(1)
     if y.get() == 0:
         z.overrideredirect(0)
+
+this = TwoPointQ
 
 
 class StartContent:
@@ -42,7 +45,7 @@ class StartContent:
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
 
-        randomized_question_gen[0](self)
+        TwoPointQ(self)
 
 
 class MenuScreen:

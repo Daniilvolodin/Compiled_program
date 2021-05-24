@@ -69,6 +69,32 @@ timer_buttons = {
     'relief': 'flat'
 }
 
+two_point_q_label = {
+    'bg': transparent,
+    'fg': 'white'
+}
+
+entry_two_point_q = {
+    'font': 'Helvetica 12',
+    'justify': 'center'
+}
+
+q3_text = {
+    'font': 'Helvetica 12 bold',
+    'bg': transparent,
+    'fg': 'white'
+
+}
+
+q3_entry = {
+    'font': 'Helvetica 12',
+    'justify': 'center'
+}
+
+q3_button = {
+    'relief': 'flat',
+    'bg': 'yellow'
+}
 
 back_button = {
     'text': 'Back',

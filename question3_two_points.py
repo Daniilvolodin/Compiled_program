@@ -19,6 +19,8 @@ class TwoPointQ:
     def __init__(self, parameter):
         self.parameter = parameter
 
+        self.exemplar_variable = StringVar()
+
         self.random_num_1 = random.choice(RandomizeAll().acceptable)
         self.random_num_2 = random.choice(RandomizeAll().acceptable)
 
@@ -44,7 +46,7 @@ class TwoPointQ:
                                          **q3_text)
         self.simplified_ex_label.grid(row=0, column=0)
 
-        self.simplified_ex_entry = Entry(self.contents_frame, **q3_entry)
+        self.simplified_ex_entry = Entry(self.contents_frame, **q3_entry, textvariable=self.exemplar_variable)
         self.simplified_ex_entry.grid(row=0, column=1, ipady=3)
 
         self.root_1_label = Label(self.contents_frame, text='Root 1:',
@@ -129,13 +131,18 @@ class HelpWindow:
         self.button_frame = Frame(self.new_frame, bg=transparent)
         self.button_frame.grid(row=2, pady=(20, 0))
 
-        self.set_exemplar = Button(self.button_frame, text='Set Exemplar', relief=FLAT)
+        self.set_exemplar = Button(self.button_frame, text='Set Exemplar', relief=FLAT,
+                                   command=lambda: self.form_sim_eq(parameter))
         self.set_exemplar.grid(row=0, column=0, padx=(0, 10), ipady=3, ipadx=15)
 
         self.dismiss = Button(self.button_frame, text='Dismiss', relief=FLAT,
                               command=partial(self.leave, parameter)
                               )
         self.dismiss.grid(row=0, column=1, ipady=3, ipadx=15)
+
+    def form_sim_eq(self, parameter):
+        parameter.exemplar_variable.set('(x+#)(x+#)')
+        self.set_exemplar.configure(state=DISABLED)
 
     def leave(self, parameter):
         self.new_window.destroy()

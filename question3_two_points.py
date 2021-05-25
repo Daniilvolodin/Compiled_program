@@ -71,6 +71,10 @@ class TwoPointQ:
                                command=lambda: self.open_help(self))
         self.question.grid(row=0, column=1, ipadx=10, ipady=3, padx=(10, 0))
 
+        self.warning_label = Label(self.start_frame, bg=transparent, text='Warning label',
+                                   font='helvetica 13 bold', fg='#f78981')
+        self.warning_label.grid(row=3, pady=(10, 0))
+
         self.next_button = Button(text="Next", state=DISABLED)
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
@@ -105,6 +109,7 @@ class HelpWindow:
         self.new_window.iconphoto(False, photo)
         self.new_window.title('Help')
         self.new_window.geometry('340x400')
+        self.new_window.protocol("WM_DELETE_WINDOW", partial(self.leave, parameter))
 
         self.new_frame = Frame(self.new_window, bg=transparent)
         self.new_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -127,5 +132,12 @@ class HelpWindow:
         self.set_exemplar = Button(self.button_frame, text='Set Exemplar', relief=FLAT)
         self.set_exemplar.grid(row=0, column=0, padx=(0, 10), ipady=3, ipadx=15)
 
-        self.dismiss = Button(self.button_frame, text='Dismiss', relief=FLAT)
+        self.dismiss = Button(self.button_frame, text='Dismiss', relief=FLAT,
+                              command=partial(self.leave, parameter)
+                              )
         self.dismiss.grid(row=0, column=1, ipady=3, ipadx=15)
+
+    def leave(self, parameter):
+        self.new_window.destroy()
+
+        parameter.question.config(state=NORMAL)

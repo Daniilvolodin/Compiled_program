@@ -140,6 +140,9 @@ class HelpWindow:
                               )
         self.dismiss.grid(row=0, column=1, ipady=3, ipadx=15)
 
+        if parameter.exemplar_variable.get() == '(x+#)(x+#)':
+            self.set_exemplar.configure(state=DISABLED)
+
     def form_sim_eq(self, parameter):
         parameter.exemplar_variable.set('(x+#)(x+#)')
         self.set_exemplar.configure(state=DISABLED)

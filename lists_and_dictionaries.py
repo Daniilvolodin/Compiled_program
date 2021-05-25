@@ -1,5 +1,6 @@
 import ctypes
 import random
+import re
 
 
 def list_clear(x, y, z):
@@ -88,7 +89,12 @@ q3_text = {
 
 q3_entry = {
     'font': 'Helvetica 12',
-    'justify': 'center'
+    'justify': 'center',
+    'relief': 'flat',
+    'highlightthickness': 1,
+    'highlightbackground': 'black',
+    'highlightcolor': '#cccccc'
+
 }
 
 q3_button = {

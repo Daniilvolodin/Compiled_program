@@ -126,15 +126,17 @@ class TwoPointQ:
             if self.attempted == self.correct_comp and self.simplified_ex_entry.get() in self.correct_answers:
                 correct.append('Correct')
             else:
-                print("Incorrect")
+                correct_answers.append(self.correct_answers[0])
 
             try:
                 [float(x) for x in [self.root_1_entry.get()]]
                 self.attempted.sort()
             except ValueError:
-                self.warning_label.configure(fg='red')
+                pass
             else:
                 self.next_button.configure(state=NORMAL)
+
+            typed_answers.append(self.simplified_ex_entry.get())
 
     def open_help(self, parameter):
         HelpWindow(parameter)

@@ -99,7 +99,7 @@ q3_entry = {
 
 q3_button = {
     'relief': 'flat',
-    'bg': 'yellow'
+    'font': 'helvetica 12 bold'
 }
 
 back_button = {
@@ -111,6 +111,23 @@ back_button = {
     'activebackground': '#004d05',
     'activeforeground': 'white'
 
+}
+
+set_2_red = {
+    'highlightbackground': 'red',
+    'highlightcolor': 'red'
+}
+
+set_2_norm = {
+    'highlightbackground': 'black',
+    'highlightcolor': '#cccccc'
+}
+
+warning_labels = {
+    'font': 'helvetica 13 bold',
+    'fg': '#f78981',
+    'text': '',
+    'bg': transparent
 }
 
 

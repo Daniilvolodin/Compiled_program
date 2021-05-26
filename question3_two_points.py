@@ -5,13 +5,25 @@ from lists_and_dictionaries import *
 from functools import partial
 
 
-def value_error(x):
+def check_root_error(value, message, num, red):
+    str(message)
+
     try:
-        float(x.get())
+        float(value.replace(' ', ''))
+
     except ValueError:
-        x.configure(highlightbackground='red', highlightcolor='red')
+
+        if value.replace(' ', '') == '':
+            message = 'Root %d entry cannot be blank' % num
+            red.configure(**set_2_red)
+        else:
+            message = 'Root %d entry cannot contain characters' % num
+            red.configure(**set_2_red)
+        return message
     else:
-        x.configure(highlightbackground='black', highlightcolor='#cccccc')
+        message = ''
+        red.configure(**set_2_norm)
+        return message
         pass
 
 
@@ -24,12 +36,21 @@ class TwoPointQ:
         self.random_num_1 = random.choice(RandomizeAll().acceptable)
         self.random_num_2 = random.choice(RandomizeAll().acceptable)
 
+        self.correct_answers = ['(x{})(x{})'.format(check_operator(x=-self.random_num_1),
+                                                    check_operator(x=-self.random_num_2)),
+                                '(x{})(x{})'.format(check_operator(x=-self.random_num_2),
+                                                    check_operator(x=-self.random_num_1)),
+                                ]
+
+        self.correct_comp = [-x for x in [self.random_num_1, self.random_num_2]]
+        self.correct_comp.sort()
+
         self.b_value = check_operator(x=(self.random_num_1 + self.random_num_2))
         self.c_value = check_operator(x=(self.random_num_1 * self.random_num_2))
         self.question_gen = "x²%sx%s" % (self.b_value, self.c_value)
 
-        self.question_prob = 'The area of a rectangle\n' \
-                             'can be represented by: %s.\n ' \
+        self.question_prob = 'The quadratic expression\n' \
+                             'is represented by: %s=0.\n ' \
                              'Find simplified quadratic form\n and define its roots' % self.question_gen
 
         self.start_frame = Frame(bg=transparent)
@@ -65,35 +86,53 @@ class TwoPointQ:
         self.buttons_frame = Frame(self.start_frame, bg=transparent)
         self.buttons_frame.grid(row=2, pady=(10, 0))
 
-        self.check = Button(self.buttons_frame, text='Check', font='helvetica 12 bold', relief=FLAT,
+        self.check = Button(self.buttons_frame, text='Check', **q3_button,
                             command=lambda: self.check_input())
         self.check.grid(row=0, column=0, ipadx=70, ipady=3)
 
-        self.question = Button(self.buttons_frame, text='?', font='helvetica 12 bold', relief=FLAT,
+        self.question = Button(self.buttons_frame, text='?', **q3_button,
                                command=lambda: self.open_help(self))
         self.question.grid(row=0, column=1, ipadx=10, ipady=3, padx=(10, 0))
 
-        self.warning_label = Label(self.start_frame, bg=transparent, text='Warning label',
-                                   font='helvetica 13 bold', fg='#f78981')
+        self.warning_label = Label(self.start_frame, **warning_labels)
         self.warning_label.grid(row=3, pady=(10, 0))
+
+        self.warning_label2 = Label(self.start_frame, **warning_labels)
+        self.warning_label2.grid(row=4, pady=(3, 0))
+
+        self.warning_label3 = Label(self.start_frame, **warning_labels)
+        self.warning_label3.grid(row=5, pady=(3, 0))
 
         self.next_button = Button(text="Next", state=DISABLED)
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
+        self.attempted = [self.root_1_entry.get(), self.root_2_entry.get()]
+        self.attempted.sort()
+
     def check_input(self):
 
-        value_error(x=self.root_1_entry)
-        value_error(x=self.root_2_entry)
+        self.warning_label2.configure(text=check_root_error(value=self.root_1_entry.get(), message='', num=1,
+                                                            red=self.root_1_entry))
+        self.warning_label3.configure(text=check_root_error(value=self.root_2_entry.get(), message='', num=2,
+                                                            red=self.root_2_entry))
 
         if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', self.simplified_ex_entry.get()):
-            self.simplified_ex_entry.configure(highlightbackground='red', highlightcolor='red')
+            self.simplified_ex_entry.configure(**set_2_red)
+            self.warning_label.configure(text='Invalid Expression')
+
         else:
-            self.simplified_ex_entry.configure(highlightbackground='black', highlightcolor='#cccccc')
+            self.simplified_ex_entry.configure(**set_2_norm)
+            self.warning_label.configure(fg=transparent)
+            if self.attempted == self.correct_comp and self.simplified_ex_entry.get() in self.correct_answers:
+                correct.append('Correct')
+            else:
+                print("Incorrect")
 
             try:
                 [float(x) for x in [self.root_1_entry.get()]]
+                self.attempted.sort()
             except ValueError:
-                pass
+                self.warning_label.configure(fg='red')
             else:
                 self.next_button.configure(state=NORMAL)
 
@@ -151,3 +190,6 @@ class HelpWindow:
         self.new_window.destroy()
 
         parameter.question.config(state=NORMAL)
+
+# Finish warning messages
+# Finish correct / incorrect answer analyzer

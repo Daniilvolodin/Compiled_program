@@ -13,8 +13,6 @@ def adjust(x, y, z):
     if y.get() == 0:
         z.overrideredirect(0)
 
-this = TwoPointQ
-
 
 class StartContent:
     def __init__(self, parameter):
@@ -44,8 +42,8 @@ class StartContent:
     def start_quiz(self):
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
-
         TwoPointQ(self)
+
 
 
 class MenuScreen:

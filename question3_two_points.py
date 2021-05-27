@@ -1,11 +1,10 @@
 # Icon source: https://www.cleanpng.com/png-question-mark-png-41220/
-
 from tkinter import *
 from lists_and_dictionaries import *
 from functools import partial
 
 
-def check_root_error(value, message, num, red):
+def check_root_error(value, message, num1, red):
     str(message)
 
     try:
@@ -14,10 +13,10 @@ def check_root_error(value, message, num, red):
     except ValueError:
 
         if value.replace(' ', '') == '':
-            message = 'Root %d entry cannot be blank' % num
+            message = 'Root %d entry cannot be blank' % num1
             red.configure(**set_2_red)
         else:
-            message = 'Root %d entry cannot contain characters' % num
+            message = 'Root %d entry cannot contain characters' % num1
             red.configure(**set_2_red)
         return message
     else:
@@ -29,8 +28,12 @@ def check_root_error(value, message, num, red):
 
 class TwoPointQ:
     def __init__(self, parameter):
+        self.minutes = minutes_left
+        self.seconds = seconds_left
         self.parameter = parameter
-
+        self.revert = 'no'
+        self.min_l = minutes_left
+        self.sec_l = seconds_left
         self.exemplar_variable = StringVar()
 
         self.random_num_1 = random.choice(RandomizeAll().acceptable)
@@ -54,7 +57,7 @@ class TwoPointQ:
                              'Find simplified quadratic form\n and define its roots' % self.question_gen
 
         self.start_frame = Frame(bg=transparent)
-        self.start_frame.place(relx=0.5, rely=0.4, anchor=CENTER)
+        self.start_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.question_label = Label(self.start_frame, text=self.question_prob, **two_point_q_label,
                                     font='Helvetica 12 bold', wrap=240)
@@ -103,17 +106,35 @@ class TwoPointQ:
         self.warning_label3 = Label(self.start_frame, **warning_labels)
         self.warning_label3.grid(row=5, pady=(3, 0))
 
-        self.next_button = Button(text="Next", state=DISABLED)
+        self.next_button = Button(text="Next", state=DISABLED, **next_button_design, padx=3)
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
         self.attempted = [self.root_1_entry.get(), self.root_2_entry.get()]
         self.attempted.sort()
 
+        self.timer = Label(text='Time remaining: %d:%d' % (minutes_left, seconds_left), **timer_design)
+        self.timer.place(relx=0.5, rely=0.95, anchor=CENTER)
+        self.timer.after(1000, lambda: self.time_count())
+
+        self.quit_button = Button(text='Quit Program', command=lambda: self.exit_quiz(),
+                                  **next_button_design)
+        self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
+
+    def time_count(self):
+        self.seconds -= 1
+        if self.seconds < 0:
+            self.minutes -= 1
+            self.seconds = 59
+        seconds_left = self.seconds
+        minutes_left = self.minutes
+        self.timer.configure(text='Time remaining: %d:%d' % (minutes_left, seconds_left))
+        self.timer.after(1000, lambda: self.time_count())
+
     def check_input(self):
 
-        self.warning_label2.configure(text=check_root_error(value=self.root_1_entry.get(), message='', num=1,
+        self.warning_label2.configure(text=check_root_error(value=self.root_1_entry.get(), message='', num1=1,
                                                             red=self.root_1_entry))
-        self.warning_label3.configure(text=check_root_error(value=self.root_2_entry.get(), message='', num=2,
+        self.warning_label3.configure(text=check_root_error(value=self.root_2_entry.get(), message='', num1=2,
                                                             red=self.root_2_entry))
 
         if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', self.simplified_ex_entry.get()):
@@ -127,6 +148,7 @@ class TwoPointQ:
                 correct.append('Correct')
             else:
                 correct_answers.append(self.correct_answers[0])
+                incorrect.append('Incorrect')
 
             try:
                 [float(x) for x in [self.root_1_entry.get()]]
@@ -142,14 +164,18 @@ class TwoPointQ:
         HelpWindow(parameter)
         self.question.configure(state=DISABLED)
 
+    def exit_quiz(self):
+
+        quit()
+
 
 class HelpWindow:
     def __init__(self, parameter):
         self.parameter = parameter
 
         self.new_window = Toplevel(bg=transparent)
-        photo = PhotoImage(file='question_symbol.png')
-        self.new_window.iconphoto(False, photo)
+        photo2 = PhotoImage(file='question_symbol.png')
+        self.new_window.iconphoto(False, photo2)
         self.new_window.title('Help')
         self.new_window.geometry('340x400')
         self.new_window.protocol("WM_DELETE_WINDOW", partial(self.leave, parameter))
@@ -193,5 +219,3 @@ class HelpWindow:
 
         parameter.question.config(state=NORMAL)
 
-# Finish warning messages
-# Finish correct / incorrect answer analyzer

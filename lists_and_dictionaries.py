@@ -130,6 +130,17 @@ warning_labels = {
     'bg': transparent
 }
 
+next_button_design = {
+    'relief': 'flat',
+    'font': 'helvetica 10 bold'
+}
+
+timer_design = {
+    'font': 'helvetica 16 underline',
+    'fg': 'white',
+    'bg': transparent
+
+}
 
 correct = []
 
@@ -144,6 +155,9 @@ randomized_question_gen = []
 seconds_left = 30
 
 minutes_left = 15
+
+original_min = minutes_left
+original_sec = seconds_left
 
 
 class RandomizeAll:

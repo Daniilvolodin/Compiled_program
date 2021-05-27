@@ -52,13 +52,13 @@ class OptionPick:
         self.option_frame.grid(row=1)
 
         self.option_1 = Radiobutton(self.option_frame, variable=self.user_pick, value=1,
-                                    text=self.shuffle_questions[0], command=lambda: self.activate_next())
+                                    text=self.shuffle_questions[0], command=lambda: self.activate_next(), **radio_button_design)
         self.option_2 = Radiobutton(self.option_frame, variable=self.user_pick, value=2,
-                                    text=self.shuffle_questions[1], command=lambda: self.activate_next())
+                                    text=self.shuffle_questions[1], command=lambda: self.activate_next(), **radio_button_design)
         self.option_3 = Radiobutton(self.option_frame, variable=self.user_pick, value=3,
-                                    text=self.shuffle_questions[2], command=lambda: self.activate_next())
+                                    text=self.shuffle_questions[2], command=lambda: self.activate_next(), **radio_button_design)
         self.option_4 = Radiobutton(self.option_frame, variable=self.user_pick, value=4,
-                                    text=self.shuffle_questions[3], command=lambda: self.activate_next())
+                                    text=self.shuffle_questions[3], command=lambda: self.activate_next(), **radio_button_design)
 
         self.option_1.grid(row=0, sticky=NSEW)
         self.option_2.grid(row=1, sticky=NSEW)
@@ -67,6 +67,20 @@ class OptionPick:
 
         self.next_button = Button(text="Next", command=lambda: self.check_answer(), state=DISABLED)
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
+
+        self.timer = Label(text='Time remaining: %d:%d' % (minutes_left, seconds_left), **timer_design)
+        self.timer.place(relx=0.5, rely=0.95, anchor=CENTER)
+        self.timer.after(1000, lambda: self.time_count())
+
+        self.quit_button = Button(text='Quit Program', command=lambda: self.exit_quiz(),
+                                  **next_button_design)
+        self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
+
+    def time_count(self):
+        pass
+
+    def exit_quiz(self):
+        pass
 
     def activate_next(self):
         self.next_button.configure(state=NORMAL)

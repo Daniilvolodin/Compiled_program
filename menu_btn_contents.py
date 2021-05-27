@@ -42,8 +42,7 @@ class StartContent:
     def start_quiz(self):
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
-        TwoPointQ(self)
-
+        OptionPick(self)
 
 
 class MenuScreen:

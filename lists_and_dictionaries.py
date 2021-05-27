@@ -142,6 +142,13 @@ timer_design = {
 
 }
 
+radio_button_design = {
+    'font': 'helvetica 16 underline',
+    'bg': transparent,
+    'highlightbackground': 'black',
+    'highlightcolor': '#cccccc'
+}
+
 correct = []
 
 incorrect = []

@@ -1,15 +1,19 @@
 from tkinter import *
 from lists_and_dictionaries import *
+from export_window import ResultsExport
+import menu_btn_contents
+
+
+def exit_quiz():
+    quit()
 
 
 class OptionPick:
     def __init__(self, parameter):
-        self.start_frame = Frame()
         self.parameter = parameter
-        self.start_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.minutes = minutes_left
+        self.seconds = seconds_left
 
-        self.button_frame = Frame()
-        self.button_frame.grid()
         self.coefficient_pick = [1, 2, 3]
 
         self.x1 = random.choice(self.coefficient_pick)
@@ -45,42 +49,59 @@ class OptionPick:
 
         self.user_pick = IntVar()
 
-        self.question_label = Label(self.start_frame, **label_config, text=self.question)
+        self.border_start = Frame(padx=3, pady=3, bg='black')
+        self.border_start.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        self.start_frame = Frame(self.border_start, bg='white', pady=10, padx=10)
+        self.start_frame.grid(row=0)
+
+        self.question_label = Label(self.start_frame, bg='white', font='helvetica 25 bold', text=self.question)
         self.question_label.grid(row=0)
 
-        self.option_frame = Frame(self.start_frame)
-        self.option_frame.grid(row=1)
+        self.option_frame = Frame(self.start_frame, bg='white')
+        self.option_frame.grid(row=1, pady=(20, 0))
 
-        self.option_1 = Radiobutton(self.option_frame, variable=self.user_pick, value=1,
-                                    text=self.shuffle_questions[0], command=lambda: self.activate_next(), **radio_button_design)
-        self.option_2 = Radiobutton(self.option_frame, variable=self.user_pick, value=2,
-                                    text=self.shuffle_questions[1], command=lambda: self.activate_next(), **radio_button_design)
-        self.option_3 = Radiobutton(self.option_frame, variable=self.user_pick, value=3,
-                                    text=self.shuffle_questions[2], command=lambda: self.activate_next(), **radio_button_design)
-        self.option_4 = Radiobutton(self.option_frame, variable=self.user_pick, value=4,
-                                    text=self.shuffle_questions[3], command=lambda: self.activate_next(), **radio_button_design)
+        self.f1 = Frame(self.option_frame, bg='black', bd=2)
+        self.f1.grid(row=0, pady=5)
+        self.f2 = Frame(self.option_frame, bg='black', bd=2)
+        self.f2.grid(row=1, pady=5)
+        self.f3 = Frame(self.option_frame, bg='black', bd=2)
+        self.f3.grid(row=2, pady=5)
+        self.f4 = Frame(self.option_frame, bg='black', bd=2)
+        self.f4.grid(row=3, pady=5)
+        self.option_1 = Radiobutton(self.f1, variable=self.user_pick, value=1,
+                                    text=self.shuffle_questions[0], command=lambda: self.activate_next(),
+                                    **radio_button_design)
+        self.option_2 = Radiobutton(self.f2, variable=self.user_pick, value=2,
+                                    text=self.shuffle_questions[1], command=lambda: self.activate_next(),
+                                    **radio_button_design)
+        self.option_3 = Radiobutton(self.f3, variable=self.user_pick, value=3,
+                                    text=self.shuffle_questions[2], command=lambda: self.activate_next(),
+                                    **radio_button_design)
+        self.option_4 = Radiobutton(self.f4, variable=self.user_pick, value=4,
+                                    text=self.shuffle_questions[3], command=lambda: self.activate_next(),
+                                    **radio_button_design)
 
-        self.option_1.grid(row=0, sticky=NSEW)
-        self.option_2.grid(row=1, sticky=NSEW)
-        self.option_3.grid(row=2, sticky=NSEW)
-        self.option_4.grid(row=3, sticky=NSEW)
+        self.option_1.grid(row=0)
+        self.option_2.grid(row=1)
+        self.option_3.grid(row=2)
+        self.option_4.grid(row=3)
 
         self.next_button = Button(text="Next", command=lambda: self.check_answer(), state=DISABLED)
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
-        self.timer = Label(text='Time remaining: %d:%d' % (minutes_left, seconds_left), **timer_design)
-        self.timer.place(relx=0.5, rely=0.95, anchor=CENTER)
-        self.timer.after(1000, lambda: self.time_count())
-
-        self.quit_button = Button(text='Quit Program', command=lambda: self.exit_quiz(),
+        self.quit_button = Button(text='Quit Program', command=lambda: exit_quiz(),
                                   **next_button_design)
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
-    def time_count(self):
-        pass
+        timerCount()
 
-    def exit_quiz(self):
-        pass
+    def to_results(self):
+        self.next_button.destroy()
+        self.border_start.destroy()
+        timerCount().timer.destroy()
+
+        ResultsExport(self)
 
     def activate_next(self):
         self.next_button.configure(state=NORMAL)
@@ -93,6 +114,9 @@ class OptionPick:
             incorrect.append("Incorrect")
             correct_answers.append(self.correct)
         typed_answers.append(self.question)
-
+        menu_btn_contents.questions[1](self)
+        self.next_button.destroy()
+        self.border_start.destroy()
+        self.quit_button.destroy()
 for num in range(3):
     randomized_question_gen.append(OptionPick)

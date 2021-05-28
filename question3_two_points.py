@@ -2,6 +2,7 @@
 from tkinter import *
 from lists_and_dictionaries import *
 from functools import partial
+import menu_btn_contents
 
 
 def check_root_error(value, message, num1, red):
@@ -106,7 +107,8 @@ class TwoPointQ:
         self.warning_label3 = Label(self.start_frame, **warning_labels)
         self.warning_label3.grid(row=5, pady=(3, 0))
 
-        self.next_button = Button(text="Next", state=DISABLED, **next_button_design, padx=3)
+        self.next_button = Button(text="Next", state=DISABLED, **next_button_design, padx=3,
+                                  command=lambda: self.check_answer())
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
         self.attempted = [self.root_1_entry.get(), self.root_2_entry.get()]
@@ -125,10 +127,35 @@ class TwoPointQ:
         if self.seconds < 0:
             self.minutes -= 1
             self.seconds = 59
+
+        if self.seconds and self.minutes == 0:
+            remaining = 10 - (len(incorrect) + len(correct))
+            for x in range(remaining):
+                incorrect.append('Incorrect')
+                typed_answers.append('')
+                correct_answers.append(self.correct_answers[0])
+
         seconds_left = self.seconds
         minutes_left = self.minutes
         self.timer.configure(text='Time remaining: %d:%d' % (minutes_left, seconds_left))
         self.timer.after(1000, lambda: self.time_count())
+
+    def stopped(self):
+        self.timer.configure(text='Time remaining: %d:%d' % (0, 0))
+        print('Finished')
+
+    def check_answer(self):
+        if self.attempted == self.correct_comp and self.simplified_ex_entry.get() in self.correct_answers:
+            correct.append('Correct')
+        else:
+            correct_answers.append(self.correct_answers[0])
+            incorrect.append('Incorrect')
+        typed_answers.append(self.simplified_ex_entry.get())
+        self.start_frame.destroy()
+        self.next_button.destroy()
+        self.quit_button.destroy()
+        self.timer.destroy()
+        menu_btn_contents.questions[0](self)
 
     def check_input(self):
 
@@ -144,11 +171,6 @@ class TwoPointQ:
         else:
             self.simplified_ex_entry.configure(**set_2_norm)
             self.warning_label.configure(fg=transparent)
-            if self.attempted == self.correct_comp and self.simplified_ex_entry.get() in self.correct_answers:
-                correct.append('Correct')
-            else:
-                correct_answers.append(self.correct_answers[0])
-                incorrect.append('Incorrect')
 
             try:
                 [float(x) for x in [self.root_1_entry.get()]]
@@ -158,14 +180,13 @@ class TwoPointQ:
             else:
                 self.next_button.configure(state=NORMAL)
 
-            typed_answers.append(self.simplified_ex_entry.get())
+
 
     def open_help(self, parameter):
         HelpWindow(parameter)
         self.question.configure(state=DISABLED)
 
     def exit_quiz(self):
-
         quit()
 
 

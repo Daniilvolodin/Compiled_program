@@ -1,6 +1,7 @@
 from tkinter import ttk
 from question1_options import *
-from question3_two_points import TwoPointQ
+from question3_two_points import *
+import random
 
 
 def adjust(x, y, z):
@@ -12,6 +13,10 @@ def adjust(x, y, z):
         z.overrideredirect(1)
     if y.get() == 0:
         z.overrideredirect(0)
+
+questions = [TwoPointQ, OptionPick]
+random.shuffle(questions)
+print(questions)
 
 
 class StartContent:
@@ -42,7 +47,7 @@ class StartContent:
     def start_quiz(self):
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
-        OptionPick(self)
+        questions[0](self)
 
 
 class MenuScreen:

@@ -1,7 +1,6 @@
 import ctypes
 import random
-import re
-
+from tkinter import *
 
 def list_clear(x, y, z):
     for list_1 in [x, y, z]:
@@ -143,10 +142,12 @@ timer_design = {
 }
 
 radio_button_design = {
-    'font': 'helvetica 16 underline',
-    'bg': transparent,
-    'highlightbackground': 'black',
-    'highlightcolor': '#cccccc'
+    'font': 'helvetica 18 bold',
+    'bg': 'white',
+    'activebackground': 'black',
+    'activeforeground': 'white',
+    'fg': 'black',
+
 }
 
 correct = []
@@ -170,3 +171,23 @@ original_sec = seconds_left
 class RandomizeAll:
     def __init__(self):
         self.acceptable = [random.randrange(-9, -1), random.randrange(1, 9)]
+
+
+class timerCount:
+    def __init__(self):
+        self.minutes = minutes_left
+        self.seconds = seconds_left
+        self.timer = Label(text='Time remaining: %d:%d' % (minutes_left, seconds_left), **timer_design)
+        self.timer.place(relx=0.5, rely=0.95, anchor=CENTER)
+        self.timer.after(10, lambda: self.update_time())
+
+    def update_time(self):
+        self.seconds -= 1
+        if self.seconds < 0:
+            self.minutes -= 1
+            self.seconds = 59
+        seconds_left = self.seconds
+        minutes_left = self.minutes
+        self.timer.configure(text='Time remaining: %d:%d' % (minutes_left, seconds_left))
+        self.timer.after(10, lambda: self.update_time())
+

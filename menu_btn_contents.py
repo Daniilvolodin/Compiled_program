@@ -1,7 +1,6 @@
 from tkinter import ttk
 from question1_options import *
 from question3_two_points import *
-import random
 
 
 def adjust(x, y, z):
@@ -14,9 +13,8 @@ def adjust(x, y, z):
     if y.get() == 0:
         z.overrideredirect(0)
 
+
 questions = [TwoPointQ, OptionPick]
-random.shuffle(questions)
-print(questions)
 
 
 class StartContent:
@@ -35,11 +33,15 @@ class StartContent:
         self.alg_quiz_label.grid(row=0, pady=(0, 15 * scale))
 
         self.alg_quiz_button = Button(self.alg_quiz_frame, text='Start Quiz', **button_config,
-                                      command=lambda: self.start_quiz())
+                                      command=lambda: self.start_quiz(), state=DISABLED)
         self.alg_quiz_button.grid(row=1, ipadx=20 * scale, ipady=5 * scale)
+        if time[0] >= 15:
+            self.enable_quiz()
+
+    def enable_button(self):
+        self.alg_quiz_button.configure(state=NORMAL)
 
     def to_menu_screen(self, parameter):
-
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
         MenuScreen(parameter)
@@ -47,7 +49,11 @@ class StartContent:
     def start_quiz(self):
         self.menu_frame.destroy()
         self.alg_quiz_frame.destroy()
+        timerCount(self)
         questions[0](self)
+
+    def enable_quiz(self):
+        self.alg_quiz_button.configure(state=NORMAL)
 
 
 class MenuScreen:
@@ -118,16 +124,13 @@ class setTimer:
         self.minute_var = IntVar()
         self.second_var = IntVar()
 
-        self.min_left = minutes_left
-        self.sec_left = seconds_left
         self.starter_frame = Frame(bg=transparent)
         self.starter_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.timer_label = Label(self.starter_frame, text='Set Time', **settings_label)
         self.timer_label.grid(row=0)
 
-        self.time_display = Label(self.starter_frame, text='%d:%d' % (minutes_left,
-                                                                      seconds_left),
+        self.time_display = Label(self.starter_frame, text='%d:%d' % (time[0], time[1]),
                                   bg=transparent,
                                   fg='white', font='Helvetica 20')
         self.time_display.grid(row=1, pady=20)
@@ -147,12 +150,12 @@ class setTimer:
                                   command=lambda: self.default_set())
         self.set_default.grid(row=3, sticky=NSEW, pady=(0, 3))
 
-        self.apply_settings_time = Button(self.starter_frame, text='Apply settings', **timer_buttons,
-                                          command=lambda: self.apply_setting())
-        self.apply_settings_time.grid(row=4, sticky=NSEW)
-
         self.back_button = Button(**back_button, command=lambda: self.back_to_menu())
         self.back_button.place(relx=0.025, rely=0.025)
+
+        self.reset = Button(self.starter_frame, text='Reset Time', **timer_buttons,
+                            command=lambda: self.reset_time(), state=DISABLED)
+        self.reset.grid(row=5, sticky=NSEW)
 
     def back_to_menu(self):
         self.starter_frame.destroy()
@@ -160,39 +163,45 @@ class setTimer:
         self.back_button.destroy()
         MenuScreen(self.parameter)
 
-    def min_configure(self):
-        self.min_left += 1
-        self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
+    def reset_time(self):
+        for x in range(len(time)):
+            time[x] = 0
+        self.time_display.configure(text='%d:%d' % (time[0], time[1]))
+        self.reset.configure(state=DISABLED)
+        self.minute_button.configure(state=NORMAL)
+        self.second_button.configure(state=NORMAL)
 
-        if self.min_left == 60:
-            self.sec_left = 0
+    def min_configure(self):
+        # time[0] = min
+        # time [1] = sec
+        self.reset.configure(state=NORMAL)
+        time[0] += 1
+        self.time_display.configure(text='%d:%d' % (time[0], time[1]))
+
+        if time[0] == 60:
+            time[1] = 0
             for button in [self.minute_button, self.second_button]:
                 button.configure(state=DISABLED)
-            self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
+            self.time_display.configure(text='%d:%d' % (time[0], time[1]))
 
     def sec_configure(self):
-        self.sec_left += 10
-        if self.sec_left >= 60:
-            self.sec_left = 0
-            self.min_left += 1
-        if self.min_left >= 60:
+        time[1] += 10
+        self.reset.configure(state=NORMAL)
+        if time[1] >= 60:
+            time[1] = 0
+            time[0] += 1
+        if time[0] >= 60:
             for button in [self.minute_button, self.second_button]:
                 button.configure(state=DISABLED)
-            self.sec_left = 0
-            self.min_left = 60
+            time[1] = 0
+            time[0] = 60
 
-        self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
+        self.time_display.configure(text='%d:%d' % (time[0], time[1]))
 
     def default_set(self):
-        self.sec_left = 30
-        self.min_left = 15
+        time[0] = 15
+        time[1] = 30
+        self.reset.configure(state=NORMAL)
         for button in [self.minute_button, self.second_button]:
             button.configure(state=NORMAL)
-        self.time_display.configure(text='%d:%d' % (self.min_left, self.sec_left))
-
-    @staticmethod
-    def apply_setting():
-
-        print('minutes:', minutes_left)
-        print('seconds:', seconds_left)
-        pass
+        self.time_display.configure(text='%d:%d' % (time[0], time[1]))

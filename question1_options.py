@@ -1,6 +1,4 @@
-from tkinter import *
 from lists_and_dictionaries import *
-from export_window import ResultsExport
 import menu_btn_contents
 
 
@@ -87,21 +85,19 @@ class OptionPick:
         self.option_3.grid(row=2)
         self.option_4.grid(row=3)
 
-        self.next_button = Button(text="Next", command=lambda: self.check_answer(), state=DISABLED)
+        self.next_button = Button(text="Next", command=lambda: self.check_answer(), state=DISABLED,
+                                  **next_button_design)
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
         self.quit_button = Button(text='Quit Program', command=lambda: exit_quiz(),
                                   **next_button_design)
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
-        timerCount()
+        self.border_start.after((time[0] * 1000) + time[1] * 10, lambda: self.remove_all())
 
-    def to_results(self):
-        self.next_button.destroy()
+    def remove_all(self):
         self.border_start.destroy()
-        timerCount().timer.destroy()
-
-        ResultsExport(self)
+        self.next_button.destroy()
 
     def activate_next(self):
         self.next_button.configure(state=NORMAL)
@@ -114,9 +110,8 @@ class OptionPick:
             incorrect.append("Incorrect")
             correct_answers.append(self.correct)
         typed_answers.append(self.question)
-        menu_btn_contents.questions[1](self)
+        menu_btn_contents.questions[0](self)
+
         self.next_button.destroy()
         self.border_start.destroy()
         self.quit_button.destroy()
-for num in range(3):
-    randomized_question_gen.append(OptionPick)

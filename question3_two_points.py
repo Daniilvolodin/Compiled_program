@@ -1,5 +1,4 @@
 # Icon source: https://www.cleanpng.com/png-question-mark-png-41220/
-from tkinter import *
 from lists_and_dictionaries import *
 from functools import partial
 import menu_btn_contents
@@ -29,12 +28,10 @@ def check_root_error(value, message, num1, red):
 
 class TwoPointQ:
     def __init__(self, parameter):
-        self.minutes = minutes_left
-        self.seconds = seconds_left
+
         self.parameter = parameter
         self.revert = 'no'
-        self.min_l = minutes_left
-        self.sec_l = seconds_left
+
         self.exemplar_variable = StringVar()
 
         self.random_num_1 = random.choice(RandomizeAll().acceptable)
@@ -45,9 +42,6 @@ class TwoPointQ:
                                 '(x{})(x{})'.format(check_operator(x=-self.random_num_2),
                                                     check_operator(x=-self.random_num_1)),
                                 ]
-
-        self.correct_comp = [-x for x in [self.random_num_1, self.random_num_2]]
-        self.correct_comp.sort()
 
         self.b_value = check_operator(x=(self.random_num_1 + self.random_num_2))
         self.c_value = check_operator(x=(self.random_num_1 * self.random_num_2))
@@ -111,51 +105,32 @@ class TwoPointQ:
                                   command=lambda: self.check_answer())
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
+        self.correct_comp = [-self.random_num_1, -self.random_num_2]
         self.attempted = [self.root_1_entry.get(), self.root_2_entry.get()]
-        self.attempted.sort()
-
-        self.timer = Label(text='Time remaining: %d:%d' % (minutes_left, seconds_left), **timer_design)
-        self.timer.place(relx=0.5, rely=0.95, anchor=CENTER)
-        self.timer.after(1000, lambda: self.time_count())
 
         self.quit_button = Button(text='Quit Program', command=lambda: self.exit_quiz(),
                                   **next_button_design)
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
-    def time_count(self):
-        self.seconds -= 1
-        if self.seconds < 0:
-            self.minutes -= 1
-            self.seconds = 59
+        self.start_frame.after((time[0] * 1000) + time[1] * 10, lambda: self.remove_all())
 
-        if self.seconds and self.minutes == 0:
-            remaining = 10 - (len(incorrect) + len(correct))
-            for x in range(remaining):
-                incorrect.append('Incorrect')
-                typed_answers.append('')
-                correct_answers.append(self.correct_answers[0])
-
-        seconds_left = self.seconds
-        minutes_left = self.minutes
-        self.timer.configure(text='Time remaining: %d:%d' % (minutes_left, seconds_left))
-        self.timer.after(1000, lambda: self.time_count())
-
-    def stopped(self):
-        self.timer.configure(text='Time remaining: %d:%d' % (0, 0))
-        print('Finished')
+    def remove_all(self):
+        self.start_frame.destroy()
+        self.next_button.destroy()
 
     def check_answer(self):
-        if self.attempted == self.correct_comp and self.simplified_ex_entry.get() in self.correct_answers:
+        if self.simplified_ex_entry.get() in self.correct_answers:
             correct.append('Correct')
+            print('Correct')
         else:
             correct_answers.append(self.correct_answers[0])
             incorrect.append('Incorrect')
+            print('Incorrect')
         typed_answers.append(self.simplified_ex_entry.get())
         self.start_frame.destroy()
         self.next_button.destroy()
         self.quit_button.destroy()
-        self.timer.destroy()
-        menu_btn_contents.questions[0](self)
+        menu_btn_contents.questions[1](self)
 
     def check_input(self):
 
@@ -180,14 +155,13 @@ class TwoPointQ:
             else:
                 self.next_button.configure(state=NORMAL)
 
-
-
     def open_help(self, parameter):
         HelpWindow(parameter)
         self.question.configure(state=DISABLED)
 
     def exit_quiz(self):
         quit()
+        self.parameter = partial
 
 
 class HelpWindow:
@@ -237,6 +211,4 @@ class HelpWindow:
 
     def leave(self, parameter):
         self.new_window.destroy()
-
         parameter.question.config(state=NORMAL)
-

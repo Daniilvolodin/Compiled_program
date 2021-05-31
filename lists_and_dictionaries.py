@@ -2,6 +2,7 @@ import ctypes
 import random
 from tkinter import *
 
+
 def list_clear(x, y, z):
     for list_1 in [x, y, z]:
         list_1.clear()
@@ -32,6 +33,7 @@ def set_size(x):
     x.state('normal')
     return x.geometry("600x500+{}+{}".format(height, width))
 
+
 scale = 1
 font_scale = 1
 
@@ -52,11 +54,11 @@ label_config_2 = {
 }
 
 button_config = {
-    'bg': 'green',
-    'fg': 'white',
+    'bg': 'white',
+    'fg': 'black',
     'relief': 'flat',
     'font': ('helvetica', 12 * scale, 'bold'),
-    'activebackground': '#004d05',
+    'activebackground': 'black',
     'activeforeground': 'white'
 }
 
@@ -103,11 +105,11 @@ q3_button = {
 
 back_button = {
     'text': 'Back',
-    'bg': 'green',
-    'fg': 'white',
+    'bg': 'white',
+    'fg': 'black',
     'relief': 'flat',
     'font': ('helvetica', 12 * scale, 'bold'),
-    'activebackground': '#004d05',
+    'activebackground': 'black',
     'activeforeground': 'white'
 
 }
@@ -149,6 +151,7 @@ radio_button_design = {
     'fg': 'black',
 
 }
+questions_remaining = 10
 
 correct = []
 
@@ -160,12 +163,13 @@ correct_answers = []
 
 randomized_question_gen = []
 
-seconds_left = 30
+seconds_left = 0
 
-minutes_left = 15
+minutes_left = 0
 
-original_min = minutes_left
-original_sec = seconds_left
+time = [minutes_left, seconds_left]
+
+delete_all = 'no'
 
 
 class RandomizeAll:
@@ -173,21 +177,49 @@ class RandomizeAll:
         self.acceptable = [random.randrange(-9, -1), random.randrange(1, 9)]
 
 
+class ResultsExport:
+    def __init__(self, parameter):
+
+        self.parameter = parameter
+
+        self.start_frame = Frame(bg='black', padx=3, pady=3)
+        self.start_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+        self.content_frame = Frame(self.start_frame, bg='white')
+        self.content_frame.grid(row=0)
+
+        self.results_label = Label(self.content_frame, text='Results', font='helvetica 18 underline',
+                                   justify=CENTER)
+        self.results_label.grid(row=0, sticky=NSEW, pady=(0, 30))
+
+        self.label = Label(self.content_frame, text=len(correct))
+        self.label.grid(row=1, sticky=NSEW)
+
+
 class timerCount:
-    def __init__(self):
-        self.minutes = minutes_left
-        self.seconds = seconds_left
-        self.timer = Label(text='Time remaining: %d:%d' % (minutes_left, seconds_left), **timer_design)
-        self.timer.place(relx=0.5, rely=0.95, anchor=CENTER)
+    def __init__(self, parameter):
+        self.parameter = parameter
+        self.frame = Frame(bg=transparent)
+        self.frame.place(relx=0.5, rely=0.95, anchor=CENTER)
+
+        self.timer = Label(self.frame, text='Time remaining: %d:%d' % (time[0], time[1]), **timer_design)
+        self.timer.grid(row=0)
+
         self.timer.after(10, lambda: self.update_time())
 
     def update_time(self):
-        self.seconds -= 1
-        if self.seconds < 0:
-            self.minutes -= 1
-            self.seconds = 59
-        seconds_left = self.seconds
-        minutes_left = self.minutes
-        self.timer.configure(text='Time remaining: %d:%d' % (minutes_left, seconds_left))
-        self.timer.after(10, lambda: self.update_time())
+        if time[0] >= 0:
+            time[1] -= 1
+            if time[1] < 0:
+                time[0] -= 1
+                time[1] = 59
 
+            self.timer.configure(text='Time remaining: %d:%d' % (time[0], time[1]), **timer_design)
+
+            self.timer.after(10, lambda: self.update_time())
+        if time[0] < 0:
+            self.stop()
+
+    def stop(self):
+        self.timer.destroy()
+        ResultsExport(self)

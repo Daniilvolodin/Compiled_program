@@ -1,5 +1,6 @@
 from lists_and_dictionaries import *
 import menu_btn_contents
+import lists_and_dictionaries
 
 
 def exit_quiz():
@@ -93,7 +94,7 @@ class OptionPick:
                                   **next_button_design)
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
-        self.border_start.after((time[0] * 1000) + time[1] * 10, lambda: self.remove_all())
+        self.border_start.after((time[0] * 1000 * 60) + time[1] * 1000, lambda: self.remove_all())
 
     def remove_all(self):
         self.border_start.destroy()
@@ -103,6 +104,7 @@ class OptionPick:
         self.next_button.configure(state=NORMAL)
 
     def check_answer(self):
+
         if self.user_pick.get() - 1 == self.shuffle_questions.index(self.correct):
             correct.append("Correct")
 
@@ -110,8 +112,13 @@ class OptionPick:
             incorrect.append("Incorrect")
             correct_answers.append(self.correct)
         typed_answers.append(self.question)
-        menu_btn_contents.questions[0](self)
-
-        self.next_button.destroy()
-        self.border_start.destroy()
-        self.quit_button.destroy()
+        lists_and_dictionaries.questions_remaining -= 1
+        print(lists_and_dictionaries.questions_remaining)
+        if lists_and_dictionaries.questions_remaining <= 0:
+            self.remove_all()
+            ResultsExport(self)
+        else:
+            menu_btn_contents.questions[0](self)
+            self.next_button.destroy()
+            self.border_start.destroy()
+            self.quit_button.destroy()

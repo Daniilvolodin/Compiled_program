@@ -2,6 +2,7 @@
 from lists_and_dictionaries import *
 from functools import partial
 import menu_btn_contents
+import lists_and_dictionaries
 
 
 def check_root_error(value, message, num1, red):
@@ -36,13 +37,11 @@ class TwoPointQ:
 
         self.random_num_1 = random.choice(RandomizeAll().acceptable)
         self.random_num_2 = random.choice(RandomizeAll().acceptable)
-
-        self.correct_answers = ['(x{})(x{})'.format(check_operator(x=-self.random_num_1),
-                                                    check_operator(x=-self.random_num_2)),
-                                '(x{})(x{})'.format(check_operator(x=-self.random_num_2),
-                                                    check_operator(x=-self.random_num_1)),
+        self.correct_answers = ['(x{})(x{})'.format(check_operator(x=self.random_num_1),
+                                                    check_operator(x=self.random_num_2)),
+                                '(x{})(x{})'.format(check_operator(x=self.random_num_2),
+                                                    check_operator(x=self.random_num_1)),
                                 ]
-
         self.b_value = check_operator(x=(self.random_num_1 + self.random_num_2))
         self.c_value = check_operator(x=(self.random_num_1 * self.random_num_2))
         self.question_gen = "x²%sx%s" % (self.b_value, self.c_value)
@@ -105,32 +104,52 @@ class TwoPointQ:
                                   command=lambda: self.check_answer())
         self.next_button.place(relx=0.95, rely=0.95, anchor=CENTER)
 
-        self.correct_comp = [-self.random_num_1, -self.random_num_2]
-        self.attempted = [self.root_1_entry.get(), self.root_2_entry.get()]
-
         self.quit_button = Button(text='Quit Program', command=lambda: self.exit_quiz(),
                                   **next_button_design)
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
-        self.start_frame.after((time[0] * 1000) + time[1] * 10, lambda: self.remove_all())
+        self.start_frame.after((time[0] * 1000 * 60) + time[1] * 1000, lambda: self.remove_all())
+        self.correct_comp = [-float(self.random_num_1), -float(self.random_num_2)]
+        self.correct_comp.sort()
 
     def remove_all(self):
         self.start_frame.destroy()
         self.next_button.destroy()
 
     def check_answer(self):
-        if self.simplified_ex_entry.get() in self.correct_answers:
+
+        self.attempted = [float(self.root_1_entry.get()), float(self.root_2_entry.get())]
+        self.attempted.sort()
+
+        if self.simplified_ex_entry.get() in self.correct_answers and self.correct_comp == self.attempted:
             correct.append('Correct')
-            print('Correct')
+            print('Correct comp:', self.correct_comp)
+            print('Attempted:', self.attempted)
+
         else:
             correct_answers.append(self.correct_answers[0])
             incorrect.append('Incorrect')
             print('Incorrect')
+            print('Correct comp:', self.correct_comp)
+            print('Attempted:', self.attempted)
+
         typed_answers.append(self.simplified_ex_entry.get())
+
         self.start_frame.destroy()
         self.next_button.destroy()
         self.quit_button.destroy()
-        menu_btn_contents.questions[1](self)
+
+        lists_and_dictionaries.questions_remaining -= 1
+
+        print(lists_and_dictionaries.questions_remaining)
+        print(self.correct_answers)
+
+        if lists_and_dictionaries.questions_remaining <= 0:
+            self.remove_all()
+            ResultsExport(self)
+
+        else:
+            menu_btn_contents.questions[1](self)
 
     def check_input(self):
 
@@ -146,6 +165,9 @@ class TwoPointQ:
         else:
             self.simplified_ex_entry.configure(**set_2_norm)
             self.warning_label.configure(fg=transparent)
+
+            self.attempted = [float(self.root_1_entry.get()), float(self.root_1_entry.get())]
+            self.attempted.sort()
 
             try:
                 [float(x) for x in [self.root_1_entry.get()]]

@@ -35,7 +35,7 @@ class StartContent:
         self.alg_quiz_button = Button(self.alg_quiz_frame, text='Start Quiz', **button_config,
                                       command=lambda: self.start_quiz(), state=DISABLED)
         self.alg_quiz_button.grid(row=1, ipadx=20 * scale, ipady=5 * scale)
-        if time[0] >= 15:
+        if time[0] >= 1:
             self.enable_quiz()
 
     def enable_button(self):

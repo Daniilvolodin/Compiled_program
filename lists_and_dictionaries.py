@@ -192,7 +192,7 @@ class ResultsExport:
                                    justify=CENTER)
         self.results_label.grid(row=0, sticky=NSEW, pady=(0, 30))
 
-        self.label = Label(self.content_frame, text=len(correct))
+        self.label = Label(self.content_frame, text=len(incorrect))
         self.label.grid(row=1, sticky=NSEW)
 
 
@@ -205,7 +205,7 @@ class timerCount:
         self.timer = Label(self.frame, text='Time remaining: %d:%d' % (time[0], time[1]), **timer_design)
         self.timer.grid(row=0)
 
-        self.timer.after(10, lambda: self.update_time())
+        self.timer.after(1000, lambda: self.update_time())
 
     def update_time(self):
         if time[0] >= 0:
@@ -216,9 +216,13 @@ class timerCount:
 
             self.timer.configure(text='Time remaining: %d:%d' % (time[0], time[1]), **timer_design)
 
-            self.timer.after(10, lambda: self.update_time())
+            self.timer.after(1000, lambda: self.update_time())
         if time[0] < 0:
             self.stop()
+            for x in range(questions_remaining - len(typed_answers)):
+                incorrect.append('Incorrect')
+        if questions_remaining <= 0:
+            self.frame.destroy()
 
     def stop(self):
         self.timer.destroy()

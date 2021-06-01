@@ -192,12 +192,12 @@ class ResultsExport:
                                    justify=CENTER)
         self.results_label.grid(row=0, sticky=NSEW, pady=(0, 30))
 
-        self.label = Label(self.content_frame, text=len(incorrect))
-        self.label.grid(row=1, sticky=NSEW)
+        self.incorrect_score = Label(self.content_frame, text='Incorrect: %d' % len(incorrect))
+        self.incorrect_score.grid(row=1, sticky=NSEW)
 
-        self.label2 = Label(self.content_frame, text=len(correct))
-        self.label2.grid(row=2, sticky=NSEW)
-        
+        self.correct_score = Label(self.content_frame, text='Correct: %d' % len(correct))
+        self.correct_score.grid(row=2, sticky=NSEW)
+
 
 class timerCount:
     def __init__(self, parameter):
@@ -222,7 +222,7 @@ class timerCount:
             self.timer.after(1000, lambda: self.update_time())
         if time[0] < 0:
 
-            for x in range(questions_remaining - len(typed_answers)):
+            for x in range(10 - len(typed_answers)):
                 incorrect.append('Incorrect')
             self.stop()
 

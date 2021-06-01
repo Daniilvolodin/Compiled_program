@@ -195,6 +195,9 @@ class ResultsExport:
         self.label = Label(self.content_frame, text=len(incorrect))
         self.label.grid(row=1, sticky=NSEW)
 
+        self.label2 = Label(self.content_frame, text=len(correct))
+        self.label2.grid(row=2, sticky=NSEW)
+        
 
 class timerCount:
     def __init__(self, parameter):
@@ -218,9 +221,11 @@ class timerCount:
 
             self.timer.after(1000, lambda: self.update_time())
         if time[0] < 0:
-            self.stop()
+
             for x in range(questions_remaining - len(typed_answers)):
                 incorrect.append('Incorrect')
+            self.stop()
+
         if questions_remaining <= 0:
             self.frame.destroy()
 

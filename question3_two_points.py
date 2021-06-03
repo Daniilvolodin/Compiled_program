@@ -26,7 +26,13 @@ def check_root_error(value, message, num1, red):
         return message
         pass
 
-
+def sim_ex(x, v):
+    if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', v.get()):
+        v.configure(**set_2_red)
+        x.configure(text='Invalid Expression')
+    else:
+        v.configure(**set_2_norm)
+        x.configure(text='')
 class TwoPointQ:
     def __init__(self, parameter):
 
@@ -159,6 +165,7 @@ class TwoPointQ:
         self.warning_label3.configure(text=check_root_error(value=self.root_2_entry.get(), message='', num1=2,
                                                             red=self.root_2_entry))
 
+
         if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', self.simplified_ex_entry.get()):
             self.simplified_ex_entry.configure(**set_2_red)
             self.warning_label.configure(text='Invalid Expression')
@@ -167,14 +174,11 @@ class TwoPointQ:
             self.simplified_ex_entry.configure(**set_2_norm)
             self.warning_label.configure(fg=transparent)
 
-            self.attempted = [float(self.root_1_entry.get()), float(self.root_1_entry.get())]
-            self.attempted.sort()
-
             try:
-                [float(x) for x in [self.root_1_entry.get()]]
+                self.attempted = [float(self.root_1_entry.get()), float(self.root_1_entry.get())]
                 self.attempted.sort()
             except ValueError:
-                pass
+                self.next_button.configure(state=DISABLED)
             else:
                 self.next_button.configure(state=NORMAL)
 

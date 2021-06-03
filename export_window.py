@@ -12,7 +12,7 @@ class ResultsExportTxt:
                            justify=CENTER)
         self.entry.grid(row=0)
         # submits user input and checks whether it's valid or not
-        self.button = Button(self.both, text='SUBMIT', **button_config, command=lambda: self.check_regex())
+        self.button = Button(self.both, text='SUBMIT', **lists_and_dictionaries.button_config, command=lambda: self.check_regex())
         self.button.grid(row=1, sticky=NSEW, pady=(10, 0))
 
         self.warning_label = Label(self.new_frame, font='Arial 16 italic', fg='#f78981',

@@ -26,6 +26,7 @@ def check_root_error(value, message, num1, red):
         return message
         pass
 
+
 def sim_ex(x, v):
     if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', v.get()):
         v.configure(**set_2_red)
@@ -33,6 +34,8 @@ def sim_ex(x, v):
     else:
         v.configure(**set_2_norm)
         x.configure(text='')
+
+
 class TwoPointQ:
     def __init__(self, parameter):
 
@@ -55,6 +58,7 @@ class TwoPointQ:
         self.question_prob = 'The quadratic expression\n' \
                              'is represented by: %s=0.\n ' \
                              'Find simplified quadratic form\n and define its roots' % self.question_gen
+        already_answered.append(self.question_gen)
 
         self.start_frame = Frame(bg=transparent)
         self.start_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
@@ -118,6 +122,12 @@ class TwoPointQ:
         self.correct_comp = [-float(self.random_num_1), -float(self.random_num_2)]
         self.correct_comp.sort()
 
+        while len(set(already_answered)) != len(already_answered):
+            print("Dupe")
+            already_answered.remove(already_answered[-1])
+            self.start_frame.destroy()
+            TwoPointQ(self)
+
     def remove_all(self):
         self.start_frame.destroy()
         self.next_button.destroy()
@@ -164,7 +174,6 @@ class TwoPointQ:
                                                             red=self.root_1_entry))
         self.warning_label3.configure(text=check_root_error(value=self.root_2_entry.get(), message='', num1=2,
                                                             red=self.root_2_entry))
-
 
         if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', self.simplified_ex_entry.get()):
             self.simplified_ex_entry.configure(**set_2_red)

@@ -20,10 +20,12 @@ class OptionPick:
 
         self.ran1 = check_operator(x=random.choice(RandomizeAll().acceptable))
         self.ran2 = check_operator(x=random.choice(RandomizeAll().acceptable))
+        if self.ran2 == self.ran1:
+            self.ran2 = check_operator(x=random.choice(RandomizeAll().acceptable))
 
         self.question = "({}x{})({}x{})".format(remove_one(x=self.x1), self.ran1, remove_one(x=self.x2),
                                                 self.ran2)
-
+        already_answered.append(self.question)
         self.ran1 = int(self.ran1)
         self.ran2 = int(self.ran2)
 
@@ -96,6 +98,12 @@ class OptionPick:
 
         self.border_start.after((time[0] * 1000 * 60) + time[1] * 1000, lambda: self.remove_all())
 
+        while len(set(already_answered)) != len(already_answered):
+            print("Dupe")
+            already_answered.remove(already_answered[-1])
+            self.border_start.destroy()
+            OptionPick(self)
+
     def remove_all(self):
         self.border_start.destroy()
         self.next_button.destroy()
@@ -115,7 +123,7 @@ class OptionPick:
                                 "Correct Answer: %s" % (self.shuffle_questions[self.user_pick.get()-1], self.correct))
 
         lists_and_dictionaries.questions_remaining -= 1
-        print(lists_and_dictionaries.questions_remaining)
+
         if lists_and_dictionaries.questions_remaining <= 0:
             self.remove_all()
             ResultsExport(self)

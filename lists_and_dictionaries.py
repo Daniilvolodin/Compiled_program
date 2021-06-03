@@ -1,7 +1,6 @@
 import ctypes
 import random
 from tkinter import *
-from tkinter import ttk
 from export_window import ResultsExportTxt
 
 
@@ -174,7 +173,7 @@ minutes_left = 0
 
 time = [minutes_left, seconds_left]
 
-delete_all = 'no'
+already_answered = []
 
 
 class RandomizeAll:
@@ -213,8 +212,6 @@ class ResultsExport:
 
             self.label = Label(self.frame, text=question, **results_config)
             self.label.grid(row=x)
-
-        self.style = ttk.Style()
 
         self.export_button = Button(self.content_frame, text='Export Results', font='Helvetica 13 bold',
                                     bg='grey', command=lambda: self.to_export(), fg='white')

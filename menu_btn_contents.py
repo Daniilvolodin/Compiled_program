@@ -1,16 +1,6 @@
 from question1_options import *
 from question3_two_points import *
-
-
-def adjust(x, y, z):
-    if x.get() == 1:
-        z.state('zoomed')
-    if x.get() == 0:
-        set_size(x=z)
-    if y.get() == 1:
-        z.overrideredirect(1)
-    if y.get() == 0:
-        z.overrideredirect(0)
+from tkinter import ttk
 
 
 questions = [TwoPointQ, OptionPick]
@@ -93,16 +83,22 @@ class MenuScreen:
         self.set_timer_btn.grid(row=4, sticky=NSEW, pady=10)
 
         self.apply_settings = Button(self.menu_content_frame, text='Apply Settings',
-                                     **timer_buttons, command=lambda: self.do_here())
+                                     **timer_buttons, command=lambda: self.adjust())
         self.apply_settings.grid(row=5, sticky=NSEW)
 
         self.back_btn = Button(**back_button,
                                command=lambda: self.back_menu(self.parameter))
         self.back_btn.place(relx=0.025, rely=0.025)
 
-    def do_here(self):
-        adjust(x=self.full_screen, y=self.value_windowed,
-               z=self.parameter)
+    def adjust(self):
+        if self.full_screen.get() == 1:
+            self.parameter.state('zoomed')
+        if self.full_screen.get() == 0:
+            set_size(x=self.parameter)
+        if self.value_windowed.get() == 1:
+            self.parameter.overrideredirect(1)
+        if self.value_windowed.get() == 0:
+            self.parameter.overrideredirect(0)
 
     def back_menu(self, parameter):
         self.menu_s_frame.destroy()

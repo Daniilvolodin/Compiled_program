@@ -107,11 +107,13 @@ class OptionPick:
 
         if self.user_pick.get() - 1 == self.shuffle_questions.index(self.correct):
             correct.append("Correct")
+            user_answers.append("Correct")
 
         else:
             incorrect.append("Incorrect")
-            correct_answers.append(self.correct)
-        typed_answers.append(self.question)
+            user_answers.append("Your Answer Was: %s\n"
+                                "Correct Answer: %s" % (self.shuffle_questions[self.user_pick.get()-1], self.correct))
+
         lists_and_dictionaries.questions_remaining -= 1
         print(lists_and_dictionaries.questions_remaining)
         if lists_and_dictionaries.questions_remaining <= 0:

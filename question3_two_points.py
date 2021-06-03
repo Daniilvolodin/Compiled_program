@@ -123,17 +123,18 @@ class TwoPointQ:
 
         if self.simplified_ex_entry.get() in self.correct_answers and self.correct_comp == self.attempted:
             correct.append('Correct')
+            user_answers.append("Correct")
             print('Correct comp:', self.correct_comp)
             print('Attempted:', self.attempted)
 
         else:
-            correct_answers.append(self.correct_answers[0])
+
             incorrect.append('Incorrect')
+            user_answers.append("Your Answer Was: %s\n"
+                                "Correct Answer: %s" % (self.simplified_ex_entry.get(), self.correct_answers[0]))
             print('Incorrect')
             print('Correct comp:', self.correct_comp)
             print('Attempted:', self.attempted)
-
-        typed_answers.append(self.simplified_ex_entry.get())
 
         self.start_frame.destroy()
         self.next_button.destroy()
@@ -194,7 +195,7 @@ class HelpWindow:
         photo2 = PhotoImage(file='question_symbol.png')
         self.new_window.iconphoto(False, photo2)
         self.new_window.title('Help')
-        self.new_window.geometry('340x400')
+        self.new_window.geometry('340x390')
         self.new_window.protocol("WM_DELETE_WINDOW", partial(self.leave, parameter))
 
         self.new_frame = Frame(self.new_window, bg=transparent)

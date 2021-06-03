@@ -1,4 +1,3 @@
-from tkinter import ttk
 from question1_options import *
 from question3_two_points import *
 

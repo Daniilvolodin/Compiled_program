@@ -1,29 +1,58 @@
-from tkinter import *
 from lists_and_dictionaries import *
+import lists_and_dictionaries
 
 
-class ResultsExport:
-    def __init__(self, parameter):
+class ResultsExportTxt:
+    def __init__(self):
+        self.new_frame = Frame(bg=lists_and_dictionaries.transparent)
+        self.new_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+        self.both = Frame(self.new_frame, bg=lists_and_dictionaries.transparent)
+        self.both.grid(row=0)
+        self.entry = Entry(self.both, font='helvetica 12 italic',
+                           justify=CENTER)
+        self.entry.grid(row=0)
+        # submits user input and checks whether it's valid or not
+        self.button = Button(self.both, text='SUBMIT', **button_config, command=lambda: self.check_regex())
+        self.button.grid(row=1, sticky=NSEW, pady=(10, 0))
 
-        self.parameter = parameter
+        self.warning_label = Label(self.new_frame, font='Arial 16 italic', fg='#f78981',
+                                   bg=lists_and_dictionaries.transparent)
+        self.warning_label.grid(row=1)
 
-        self.start_frame = Frame(bg='black', padx=3, pady=3)
-        self.start_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+    def check_regex(self):
+        check = self.entry.get()
 
-        self.content_frame = Frame(self.start_frame, bg='white')
-        self.content_frame.grid(row=0)
+        problem = ''
+        for v in check:
+            # if input is valid, the program continues
+            if re.match(r'[A-Za-z1-90]', v):
+                continue
+            # if input is empty, the message will
+            # be set to warn user that it cannot contain
+            # blank spaces
 
-        self.results_label = Label(self.content_frame, text='Results', font='helvetica 18 underline',
-                                   justify=CENTER)
-        self.results_label.grid(row=0, sticky=NSEW, pady=(0, 30))
-
-        for x in range(len(typed_answers)):
-            self.x = Label(self.content_frame, text=incorrect[x])
-            self.x.grid(row=x+1, column=0)
-
-            self.y = Label(self.content_frame, text=correct_answers[x])
-            self.y.grid(row=x+1, column=1)
-
-            self.z = Label(self.content_frame, text=typed_answers[x])
-            self.z.grid(row=x+1, column=2)
-
+            if v == ' ':
+                problem = 'No blank spaces'
+            # Cannot contain symbols
+            else:
+                problem = 'No Symbols Such As ' + str(v)
+            break
+        # File name cannot be left blank
+        if check == '':
+            problem = 'File name cannot be left empty'
+        # show warning message if there is a problem
+        if problem != '':
+            self.warning_label.configure(text=problem)
+            return
+        # otherwise, the program creates a text file
+        # with user results
+        else:
+            self.warning_label.configure(text='Clear', fg='green')
+            filename = str(self.entry.get())+'.txt'
+            f = open(filename, 'w+')
+            for x in lists_and_dictionaries.user_answers:
+                f.write('Question {}:'.format(lists_and_dictionaries.user_answers.index(x) + 1) +
+                        '  ' + str(x) + '\n\n')
+            f.read()
+            f.close()
+            quit()

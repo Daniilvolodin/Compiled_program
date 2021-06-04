@@ -5,6 +5,10 @@ import menu_btn_contents
 import lists_and_dictionaries
 
 
+# function generates warning messages that are
+# appropriate to the given user input
+# checks if user input is blank or contains
+# forbidden characters
 def check_root_error(value, message, num1, red):
     str(message)
 
@@ -27,6 +31,9 @@ def check_root_error(value, message, num1, red):
         pass
 
 
+# Regular expression function that compares
+# ordinary quadratic expression to user input
+# if it doesn't match, the program will display warning message
 def sim_ex(x, v):
     if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', v.get()):
         v.configure(**set_2_red)
@@ -36,16 +43,20 @@ def sim_ex(x, v):
         x.configure(text='')
 
 
+# Two point question involves asking user for
+# a simplified quadratic expression from a regular quadratic and
+# its two roots.
 class TwoPointQ:
     def __init__(self, parameter):
 
         self.parameter = parameter
-        self.revert = 'no'
 
         self.exemplar_variable = StringVar()
 
         self.random_num_1 = random.choice(RandomizeAll().acceptable)
         self.random_num_2 = random.choice(RandomizeAll().acceptable)
+
+        # Contains a list of possible correct answers.
         self.correct_answers = ['(x{})(x{})'.format(check_operator(x=self.random_num_1),
                                                     check_operator(x=self.random_num_2)),
                                 '(x{})(x{})'.format(check_operator(x=self.random_num_2),
@@ -55,6 +66,7 @@ class TwoPointQ:
         self.c_value = check_operator(x=(self.random_num_1 * self.random_num_2))
         self.question_gen = "x²%sx%s" % (self.b_value, self.c_value)
 
+        # Question generator variable
         self.question_prob = 'The quadratic expression\n' \
                              'is represented by: %s=0.\n ' \
                              'Find simplified quadratic form\n and define its roots' % self.question_gen
@@ -118,31 +130,41 @@ class TwoPointQ:
                                   **next_button_design)
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
+        # after specific amount of time, the question gui will get destroyed
+        # and displayed user results despite him not finishing the quiz.
         self.start_frame.after((time[0] * 1000 * 60) + time[1] * 1000, lambda: self.remove_all())
         self.correct_comp = [-float(self.random_num_1), -float(self.random_num_2)]
         self.correct_comp.sort()
 
+        # if there is a duplicate in a list of already answered questions
+        # the program will update itself until it generates a question
+        # that hasn't been answered
         while len(set(already_answered)) != len(already_answered):
             print("Dupe")
             already_answered.remove(already_answered[-1])
             self.start_frame.destroy()
             TwoPointQ(self)
 
+    # Removes all the question contents including its
+    # graphical interface
     def remove_all(self):
         self.start_frame.destroy()
         self.next_button.destroy()
 
+    # Checking if user answer is right or wrong
     def check_answer(self):
 
         self.attempted = [float(self.root_1_entry.get()), float(self.root_2_entry.get())]
         self.attempted.sort()
 
+        # if user answer is correct, the program will add it to particular lists
+        # that will later display that data in results interface
         if self.simplified_ex_entry.get() in self.correct_answers and self.correct_comp == self.attempted:
             correct.append('Correct')
             user_answers.append("Correct")
             print('Correct comp:', self.correct_comp)
             print('Attempted:', self.attempted)
-
+        # same function as above but correct is substituted with incorrect
         else:
 
             incorrect.append('Incorrect')
@@ -161,13 +183,16 @@ class TwoPointQ:
         print(lists_and_dictionaries.questions_remaining)
         print(self.correct_answers)
 
+        # If there are no more questions left to answer, the program
+        # will direct user to results interface.
         if lists_and_dictionaries.questions_remaining <= 0:
             self.remove_all()
             ResultsExport(self)
-
+        # otherwise it will move user to multi-choice questions
         else:
             menu_btn_contents.questions[1](self)
 
+    # compares user answer whether it's valid or not.
     def check_input(self):
 
         self.warning_label2.configure(text=check_root_error(value=self.root_1_entry.get(), message='', num1=1,
@@ -175,6 +200,7 @@ class TwoPointQ:
         self.warning_label3.configure(text=check_root_error(value=self.root_2_entry.get(), message='', num1=2,
                                                             red=self.root_2_entry))
 
+        # Display warning message if user expression is wrong
         if not re.match(r'^\(x[+\-]\d*\)\(x[+\-]\d*\)$', self.simplified_ex_entry.get()):
             self.simplified_ex_entry.configure(**set_2_red)
             self.warning_label.configure(text='Invalid Expression')
@@ -191,15 +217,19 @@ class TwoPointQ:
             else:
                 self.next_button.configure(state=NORMAL)
 
+    # Directs user to a help window
     def open_help(self, parameter):
         HelpWindow(parameter)
         self.question.configure(state=DISABLED)
 
+    # Exits the quiz
     def exit_quiz(self):
         quit()
         self.parameter = partial
 
 
+# Help window - Holds information about how to approach
+# A two point question.
 class HelpWindow:
     def __init__(self, parameter):
         self.parameter = parameter
@@ -209,6 +239,8 @@ class HelpWindow:
         self.new_window.iconphoto(False, photo2)
         self.new_window.title('Help')
         self.new_window.geometry('340x390')
+
+        # Uses partial library so it can do both function simultaneously
         self.new_window.protocol("WM_DELETE_WINDOW", partial(self.leave, parameter))
 
         self.new_frame = Frame(self.new_window, bg=transparent)
@@ -241,10 +273,12 @@ class HelpWindow:
         if parameter.exemplar_variable.get() == '(x+#)(x+#)':
             self.set_exemplar.configure(state=DISABLED)
 
+    # Adds a simplified quad. exemplar to user entry
     def form_sim_eq(self, parameter):
         parameter.exemplar_variable.set('(x+#)(x+#)')
         self.set_exemplar.configure(state=DISABLED)
 
+    # Closes help window.
     def leave(self, parameter):
         self.new_window.destroy()
         parameter.question.config(state=NORMAL)

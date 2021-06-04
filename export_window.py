@@ -2,6 +2,11 @@ from lists_and_dictionaries import *
 import lists_and_dictionaries
 
 
+# GUI window has an entry and a button
+# checks if entry input matches regular expressions
+# If valid, the program will close and create a filename
+# with user input.
+# Otherwise it will continue on asking for an input.
 class ResultsExportTxt:
     def __init__(self):
         self.new_frame = Frame(bg=lists_and_dictionaries.transparent)
@@ -15,7 +20,6 @@ class ResultsExportTxt:
         self.button = Button(self.both, text='SUBMIT', **lists_and_dictionaries.button_config,
                              command=lambda: self.check_regex())
         self.button.grid(row=1, sticky=NSEW, pady=(10, 0))
-
         self.warning_label = Label(self.new_frame, font='Arial 16 italic', fg='#f78981',
                                    bg=lists_and_dictionaries.transparent)
         self.warning_label.grid(row=1)

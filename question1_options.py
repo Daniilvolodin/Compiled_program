@@ -3,26 +3,30 @@ import menu_btn_contents
 import lists_and_dictionaries
 
 
+# Exits quiz
 def exit_quiz():
     quit()
 
 
+# Multi-choice questions
 class OptionPick:
     def __init__(self, parameter):
         self.parameter = parameter
         self.minutes = minutes_left
         self.seconds = seconds_left
 
+        # List contains possible coefficients in randomly generated questions
         self.coefficient_pick = [1, 2, 3]
 
+        # Picks one of coefficients from the list above and adds it to a question
         self.x1 = random.choice(self.coefficient_pick)
         self.x2 = random.choice(self.coefficient_pick)
 
+        # String Variables that use a different class to randomize variables
         self.ran1 = check_operator(x=random.choice(RandomizeAll().acceptable))
         self.ran2 = check_operator(x=random.choice(RandomizeAll().acceptable))
-        if self.ran2 == self.ran1:
-            self.ran2 = check_operator(x=random.choice(RandomizeAll().acceptable))
 
+        # Structures and finalizes question which would be displayed in the interface
         self.question = "({}x{})({}x{})".format(remove_one(x=self.x1), self.ran1, remove_one(x=self.x2),
                                                 self.ran2)
         already_answered.append(self.question)
@@ -30,6 +34,10 @@ class OptionPick:
         self.ran2 = int(self.ran2)
 
         self.operators = ['+', '-']
+
+        # Creates four variations of possible answers where
+        # one of them is correct and the rest of them is
+        # incorrect.
 
         self.a_op = remove_one(x=self.x1 * self.x2)
         self.b_op = check_operator(x=(self.x1 * self.ran2) + (self.x2 * self.ran1))
@@ -41,10 +49,12 @@ class OptionPick:
 
         self.incorrect_1 = "{}x²{}x{}".format(self.a_op, str(self.b_op).replace(str(self.b_op)[0],
                                               self.operators[self.operators.index(str(self.b_op)[0]) - 1]),
-                                              self.c_op)
+                                              check_operator(x=-(self.ran1 * self.ran2)))
         self.incorrect_2 = "{}x²{}x{}".format(self.a_op, self.b_op, check_operator(x=self.ran1 + self.ran2))
         self.incorrect_3 = "{}x²{}x{}".format(self.a_op, self.alt_b_value, self.c_op)
 
+        # List contains 4 incorrect and 1 correct answer which it then shuffles
+        # Therefore allowing the correct answer to have different position each time.
         self.shuffle_questions = [self.correct, self.incorrect_1, self.incorrect_2, self.incorrect_3]
         random.shuffle(self.shuffle_questions)
 
@@ -98,12 +108,14 @@ class OptionPick:
 
         self.border_start.after((time[0] * 1000 * 60) + time[1] * 1000, lambda: self.remove_all())
 
+        # Recycled component from question3_two_points.py
         while len(set(already_answered)) != len(already_answered):
             print("Dupe")
             already_answered.remove(already_answered[-1])
             self.border_start.destroy()
             OptionPick(self)
 
+    # Removes multi-choice question interface
     def remove_all(self):
         self.border_start.destroy()
         self.next_button.destroy()
@@ -111,6 +123,8 @@ class OptionPick:
     def activate_next(self):
         self.next_button.configure(state=NORMAL)
 
+    # If user choice is correct or incorrect, the program will
+    # continue on asking user questions until it exceeds question limit.
     def check_answer(self):
 
         if self.user_pick.get() - 1 == self.shuffle_questions.index(self.correct):

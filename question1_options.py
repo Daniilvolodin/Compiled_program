@@ -107,7 +107,7 @@ class OptionPick:
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
         self.border_start.after((time[0] * 1000 * 60) + time[1] * 1000, lambda: self.remove_all())
-
+        lists_and_dictionaries.questionsRemainingClass()
         # Recycled component from question3_two_points.py
         while len(set(already_answered)) != len(already_answered):
             print("Dupe")

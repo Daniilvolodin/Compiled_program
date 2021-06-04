@@ -2,10 +2,11 @@ from question1_options import *
 from question3_two_points import *
 from tkinter import ttk
 
-
+# Classes that contain user interfaces (e.g. two-point question)
 questions = [TwoPointQ, OptionPick]
 
 
+# Initial UI that user encounters when he runs the quiz.
 class StartContent:
     def __init__(self, parameter):
         self.menu_frame = Frame()
@@ -24,7 +25,7 @@ class StartContent:
         self.alg_quiz_button = Button(self.alg_quiz_frame, text='Start Quiz', **button_config,
                                       command=lambda: self.start_quiz(), state=DISABLED)
         self.alg_quiz_button.grid(row=1, ipadx=20 * scale, ipady=5 * scale)
-        if time[0] >= 1:
+        if time[0] >= 10:
             self.enable_quiz()
 
     def enable_button(self):
@@ -90,6 +91,7 @@ class MenuScreen:
                                command=lambda: self.back_menu(self.parameter))
         self.back_btn.place(relx=0.025, rely=0.025)
 
+    # Function adjusts screen size based on user preference (e.g. full screen with title bar)
     def adjust(self):
         if self.full_screen.get() == 1:
             self.parameter.state('zoomed')
@@ -100,6 +102,7 @@ class MenuScreen:
         if self.value_windowed.get() == 0:
             self.parameter.overrideredirect(0)
 
+    # Function directs user back to starting screen
     def back_menu(self, parameter):
         self.menu_s_frame.destroy()
         self.back_btn.destroy()
@@ -113,6 +116,7 @@ class MenuScreen:
         setTimer(parameter)
 
 
+# Directs user to time setting UI
 class setTimer:
     def __init__(self, parameter):
         self.parameter = parameter
@@ -152,12 +156,15 @@ class setTimer:
                             command=lambda: self.reset_time(), state=DISABLED)
         self.reset.grid(row=5, sticky=NSEW)
 
+    # Directs user back to screen menu
     def back_to_menu(self):
         self.starter_frame.destroy()
         self.button_frame.destroy()
         self.back_button.destroy()
         MenuScreen(self.parameter)
 
+    # Resets time so that it is zero minutes
+    # and zero seconds
     def reset_time(self):
         for x in range(len(time)):
             time[x] = 0
@@ -166,6 +173,7 @@ class setTimer:
         self.minute_button.configure(state=NORMAL)
         self.second_button.configure(state=NORMAL)
 
+    # Adds a minute to a timer (the limit is 60 minutes e.g. 1 hour)
     def min_configure(self):
         # time[0] = min
         # time [1] = sec
@@ -179,6 +187,8 @@ class setTimer:
                 button.configure(state=DISABLED)
             self.time_display.configure(text='%d:%d' % (time[0], time[1]))
 
+    # Adds ten seconds to a timer, for every sixty seconds
+    # the timer adds a minute and sets seconds value to zero.
     def sec_configure(self):
         time[1] += 10
         self.reset.configure(state=NORMAL)
@@ -193,9 +203,11 @@ class setTimer:
 
         self.time_display.configure(text='%d:%d' % (time[0], time[1]))
 
+    # Sets timer to default (10 minutes and zero seconds) which
+    # is the average amount of time it takes to complete the quiz.
     def default_set(self):
-        time[0] = 15
-        time[1] = 30
+        time[0] = 10
+        time[1] = 0
         self.reset.configure(state=NORMAL)
         for button in [self.minute_button, self.second_button]:
             button.configure(state=NORMAL)

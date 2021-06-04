@@ -256,3 +256,10 @@ class timerCount:
     def stop(self):
         self.timer.destroy()
         ResultsExport(self)
+
+
+class questionsRemainingClass:
+    def __init__(self):
+        self.question_track = Label(text='Questions Remaining: %d' % (10 - len(user_answers)),
+                                    font='Helvetica 12 underline', fg='white', bg=transparent)
+        self.question_track.place(relx=0.5, rely=0.15, anchor=CENTER)

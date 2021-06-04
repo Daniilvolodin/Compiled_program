@@ -145,6 +145,8 @@ class TwoPointQ:
             self.start_frame.destroy()
             TwoPointQ(self)
 
+        lists_and_dictionaries.questionsRemainingClass()
+
     # Removes all the question contents including its
     # graphical interface
     def remove_all(self):

@@ -106,8 +106,11 @@ class OptionPick:
                                   **next_button_design)
         self.quit_button.place(relx=0.1, rely=0.95, anchor=CENTER)
 
+        self.question_tracker = Label(text='Questions Remaining: %d' % (10 - len(user_answers)),
+                                      font='Helvetica 12 underline', fg='white', bg=transparent)
+        self.question_tracker.place(relx=0.5, rely=0.15, anchor=CENTER)
+
         self.border_start.after((time[0] * 1000 * 60) + time[1] * 1000, lambda: self.remove_all())
-        lists_and_dictionaries.questionsRemainingClass()
         # Recycled component from question3_two_points.py
         while len(set(already_answered)) != len(already_answered):
             print("Dupe")
@@ -119,6 +122,7 @@ class OptionPick:
     def remove_all(self):
         self.border_start.destroy()
         self.next_button.destroy()
+        self.question_tracker.destroy()
 
     def activate_next(self):
         self.next_button.configure(state=NORMAL)
@@ -146,3 +150,4 @@ class OptionPick:
             self.next_button.destroy()
             self.border_start.destroy()
             self.quit_button.destroy()
+            self.question_tracker.destroy()

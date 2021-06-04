@@ -14,17 +14,17 @@ class StartContent:
         self.menu_frame.place(relx=0.025, rely=0.025)
         self.menu_button = Button(self.menu_frame, **button_config,
                                   text='Menu Button', command=lambda: self.to_menu_screen(self.parameter))
-        self.menu_button.grid(row=0, ipady=10 * scale, ipadx=10 * scale)
+        self.menu_button.grid(row=0, ipady=10, ipadx=10)
 
         self.alg_quiz_frame = Frame(bg=transparent)
         self.alg_quiz_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
 
         self.alg_quiz_label = Label(self.alg_quiz_frame, text='Algebra Quiz', **label_config)
-        self.alg_quiz_label.grid(row=0, pady=(0, 15 * scale))
+        self.alg_quiz_label.grid(row=0, pady=(0, 15))
 
         self.alg_quiz_button = Button(self.alg_quiz_frame, text='Start Quiz', **button_config,
                                       command=lambda: self.start_quiz(), state=DISABLED)
-        self.alg_quiz_button.grid(row=1, ipadx=20 * scale, ipady=5 * scale)
+        self.alg_quiz_button.grid(row=1, ipadx=20, ipady=5)
         if time[0] >= 10:
             self.enable_quiz()
 

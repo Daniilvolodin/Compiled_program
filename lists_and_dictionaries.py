@@ -4,11 +4,15 @@ from tkinter import *
 from export_window import ResultsExportTxt
 
 
+# Clears all lists using parameters
 def list_clear(x, y, z):
     for list_1 in [x, y, z]:
         list_1.clear()
 
 
+# If integer is positive, the function
+# adds makes the parameter a string
+# and adds plus to it.
 def check_operator(x):
     if x >= 0:
         return "+" + str(x)
@@ -17,6 +21,8 @@ def check_operator(x):
         return str(x)
 
 
+# If coefficient is 1, function
+# will replace it with a blank space.
 def remove_one(x):
     if x == 1:
         x = ''
@@ -35,11 +41,10 @@ def set_size(x):
     return x.geometry("800x700+{}+{}".format(height, width))
 
 
-scale = 1
-font_scale = 1
-
 transparent = '#787878'
 
+# Dictionaries hold button, label and entry make up
+# e.g. (font, background colour and text colour)
 label_config = {
     'bg': '#787878',
     'font': 'helvetica 25 bold',
@@ -58,7 +63,7 @@ button_config = {
     'bg': 'white',
     'fg': 'black',
     'relief': 'flat',
-    'font': ('helvetica', 12 * scale, 'bold'),
+    'font': ('helvetica', 12, 'bold'),
     'activebackground': 'black',
     'activeforeground': 'white'
 }
@@ -109,7 +114,7 @@ back_button = {
     'bg': 'white',
     'fg': 'black',
     'relief': 'flat',
-    'font': ('helvetica', 12 * scale, 'bold'),
+    'font': ('helvetica', 12, 'bold'),
     'activebackground': 'black',
     'activeforeground': 'white'
 
@@ -157,6 +162,8 @@ results_config = {
     'font': 'Arial 10 bold',
     'bg': 'white'
 }
+
+#
 questions_remaining = 10
 
 correct = []
@@ -176,11 +183,14 @@ time = [minutes_left, seconds_left]
 already_answered = []
 
 
+# Generates random number between -9 to -1
+# and 1 to 9, skipping zero.
 class RandomizeAll:
     def __init__(self):
         self.acceptable = [random.randrange(-9, -1), random.randrange(1, 9)]
 
 
+# Results  UI
 class ResultsExport:
     def __init__(self, parameter):
 
@@ -207,6 +217,7 @@ class ResultsExport:
         self.frame = Frame(self.content_frame, bg='white')
         self.frame.grid(row=3)
 
+        # Creates 10 labels in a loop
         for x in range(len(user_answers)):
             question = 'Question {}: {}' .format((x+1), user_answers[x])
 
@@ -217,13 +228,16 @@ class ResultsExport:
                                     bg='grey', command=lambda: self.to_export(), fg='white')
         self.export_button.grid(row=4, pady=10)
 
+    # Directs user to export class
     def to_export(self):
         self.start_frame.destroy()
         ResultsExportTxt()
 
 
+# Timer UI
 class timerCount:
     def __init__(self, parameter):
+
         self.parameter = parameter
         self.frame = Frame(bg=transparent)
         self.frame.place(relx=0.5, rely=0.95, anchor=CENTER)
@@ -231,8 +245,10 @@ class timerCount:
         self.timer = Label(self.frame, text='Time remaining: %d:%d' % (time[0], time[1]), **timer_design)
         self.timer.grid(row=0)
 
+        # Calls a function every thousand milliseconds
         self.timer.after(1000, lambda: self.update_time())
 
+    # Timer countdown
     def update_time(self):
         if time[0] >= 0:
             time[1] -= 1
@@ -243,8 +259,9 @@ class timerCount:
             self.timer.configure(text='Time remaining: %d:%d' % (time[0], time[1]), **timer_design)
 
             self.timer.after(1000, lambda: self.update_time())
-        if time[0] < 0:
 
+        if time[0] < 0:
+            
             for x in range(10 - len(user_answers)):
                 incorrect.append('Incorrect')
                 user_answers.append('Your Answer Was: blank')
@@ -256,10 +273,3 @@ class timerCount:
     def stop(self):
         self.timer.destroy()
         ResultsExport(self)
-
-
-class questionsRemainingClass:
-    def __init__(self):
-        self.question_track = Label(text='Questions Remaining: %d' % (10 - len(user_answers)),
-                                    font='Helvetica 12 underline', fg='white', bg=transparent)
-        self.question_track.place(relx=0.5, rely=0.15, anchor=CENTER)

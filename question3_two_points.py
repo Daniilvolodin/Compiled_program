@@ -136,6 +136,10 @@ class TwoPointQ:
         self.correct_comp = [-float(self.random_num_1), -float(self.random_num_2)]
         self.correct_comp.sort()
 
+        self.question_tracker = Label(text='Questions Remaining: %d' % (10 - len(user_answers)),
+                                      font='Helvetica 12 underline', fg='white', bg=transparent)
+        self.question_tracker.place(relx=0.5, rely=0.15, anchor=CENTER)
+
         # if there is a duplicate in a list of already answered questions
         # the program will update itself until it generates a question
         # that hasn't been answered
@@ -145,13 +149,12 @@ class TwoPointQ:
             self.start_frame.destroy()
             TwoPointQ(self)
 
-        lists_and_dictionaries.questionsRemainingClass()
-
     # Removes all the question contents including its
     # graphical interface
     def remove_all(self):
         self.start_frame.destroy()
         self.next_button.destroy()
+        self.question_tracker.destroy()
 
     # Checking if user answer is right or wrong
     def check_answer(self):
@@ -179,7 +182,7 @@ class TwoPointQ:
         self.start_frame.destroy()
         self.next_button.destroy()
         self.quit_button.destroy()
-
+        self.question_tracker.destroy()
         lists_and_dictionaries.questions_remaining -= 1
 
         print(lists_and_dictionaries.questions_remaining)
@@ -189,6 +192,7 @@ class TwoPointQ:
         # will direct user to results interface.
         if lists_and_dictionaries.questions_remaining <= 0:
             self.remove_all()
+
             ResultsExport(self)
         # otherwise it will move user to multi-choice questions
         else:

@@ -23,6 +23,7 @@ def check_root_error(value, message, num1, red):
         else:
             message = 'Root %d entry cannot contain characters' % num1
             red.configure(**set_2_red)
+
         return message
     else:
         message = ''
@@ -222,6 +223,12 @@ class TwoPointQ:
                 self.next_button.configure(state=DISABLED)
             else:
                 self.next_button.configure(state=NORMAL)
+        try:
+            float(self.root_1_entry.get())
+            float(self.root_2_entry.get())
+
+        except ValueError:
+            self.next_button.configure(state=DISABLED)
 
     # Directs user to a help window
     def open_help(self, parameter):

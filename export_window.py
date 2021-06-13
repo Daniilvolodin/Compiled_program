@@ -1,5 +1,6 @@
 from lists_and_dictionaries import *
 import lists_and_dictionaries
+import re
 
 
 # GUI window has an entry and a button

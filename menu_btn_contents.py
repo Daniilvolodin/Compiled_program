@@ -25,7 +25,7 @@ class StartContent:
         self.alg_quiz_button = Button(self.alg_quiz_frame, text='Start Quiz', **button_config,
                                       command=lambda: self.start_quiz(), state=DISABLED)
         self.alg_quiz_button.grid(row=1, ipadx=20, ipady=5)
-        if time[0] >= 10:
+        if time[0] >= 1:
             self.enable_quiz()
 
     def enable_button(self):
@@ -153,7 +153,7 @@ class setTimer:
         self.back_button.place(relx=0.025, rely=0.025)
 
         self.reset = Button(self.starter_frame, text='Reset Time', **timer_buttons,
-                            command=lambda: self.reset_time(), state=DISABLED)
+                            command=lambda: self.reset_time())
         self.reset.grid(row=5, sticky=NSEW)
 
     # Directs user back to screen menu

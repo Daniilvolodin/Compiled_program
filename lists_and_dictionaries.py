@@ -176,7 +176,7 @@ randomized_question_gen = []
 
 seconds_left = 0
 
-minutes_left = 0
+minutes_left = 10
 
 time = [minutes_left, seconds_left]
 

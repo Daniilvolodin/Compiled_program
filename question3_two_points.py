@@ -171,11 +171,23 @@ class TwoPointQ:
             print('Correct comp:', self.correct_comp)
             print('Attempted:', self.attempted)
         # same function as above but correct is substituted with incorrect
+        if self.simplified_ex_entry.get() not in self.correct_answers:
+            incorrect.append('Incorrect')
+            user_answers.append("Your Answer Was: %s\n"
+                                "Correct Answer: %s"
+                                % (self.simplified_ex_entry.get(), self.correct_answers[0]))
+
+        if self.correct_comp != self.attempted:
+            incorrect.append('Incorrect')
+            user_answers.append("Your Answer Was: %s\n"
+                                "Correct Answer: %s" % (self.attempted, self.correct_comp))
         else:
 
             incorrect.append('Incorrect')
             user_answers.append("Your Answer Was: %s\n"
-                                "Correct Answer: %s" % (self.simplified_ex_entry.get(), self.correct_answers[0]))
+                                "Correct Answer: Expression: %s\nRoots: %d and %d"
+                                % (self.simplified_ex_entry.get(), self.correct_answers[0],
+                                   self.correct_comp[0], self.correct_comp[1]))
             print('Incorrect')
             print('Correct comp:', self.correct_comp)
             print('Attempted:', self.attempted)
